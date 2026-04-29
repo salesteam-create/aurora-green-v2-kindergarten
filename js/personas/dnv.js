@@ -107,6 +107,12 @@ function decide(sub, decision) {
         if (decision === 'approved') cert.status = 'approved';
         else if (decision === 'changes-requested') cert.status = 'partial';
         else if (decision === 'rejected') cert.status = 'missing';
+        // On non-approval, clear stale uploads/findings so the re-submit flow starts clean.
+        // The submission itself already snapshotted these into sub.docs.
+        if (decision !== 'approved') {
+          cert.uploadedDocs = [];
+          cert.aiFindings = [];
+        }
       }
     }
 
