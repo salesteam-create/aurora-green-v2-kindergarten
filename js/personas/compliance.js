@@ -168,6 +168,33 @@ window.ComplianceViews['cert-engine'] = function (root) {
   });
 };
 
+function findReviewerFeedback(certId) {
+  const matches = (window.demoState.completedReviews || [])
+    .filter(r => r.certId === certId && r.decision !== 'approved');
+  if (matches.length === 0) return null;
+  return matches.slice().sort((a, b) => new Date(b.decidedAt) - new Date(a.decidedAt))[0];
+}
+
+function reviewerFeedbackCard(feedback) {
+  const isReject = feedback.decision === 'rejected';
+  const pillClass = isReject ? 'pill-bad' : 'pill-warn';
+  const label = feedback.decision.replace('-', ' ');
+  const notes = feedback.reviewerNotes || 'Reviewer requested changes — see DNV report.';
+  return `
+    <div class="rounded-lg p-4 border" style="border-color:${isReject ? 'rgba(251,113,133,.35)' : 'rgba(245,158,11,.35)'}; background:${isReject ? 'rgba(251,113,133,.06)' : 'rgba(245,158,11,.06)'};">
+      <div class="flex items-center justify-between mb-2">
+        <div class="flex items-center gap-2 text-sm font-medium text-slate-100">
+          <i data-lucide="message-square-warning" class="w-4 h-4 ${isReject ? 'text-rose-300' : 'text-amber-300'}"></i>
+          Reviewer feedback
+        </div>
+        <span class="pill ${pillClass}">${label}</span>
+      </div>
+      <div class="text-sm text-slate-200 leading-relaxed">${notes}</div>
+      <div class="text-xs text-slate-500 mt-2">Address feedback and re-upload to resubmit.</div>
+    </div>
+  `;
+}
+
 function certDetailHTML(cert) {
   const uploaded = cert.uploadedDocs.length > 0;
   return `
@@ -231,6 +258,10 @@ function certDetailHTML(cert) {
           <div class="text-sm text-slate-300 mt-1">Uploaded: ${cert.uploadedDocs.join(', ')}</div>
         </div>
       ` : `
+        ${(() => {
+          const fb = findReviewerFeedback(cert.id);
+          return fb ? reviewerFeedbackCard(fb) : '';
+        })()}
         <div>
           <div class="text-sm text-slate-400 mb-2">Upload supporting documents</div>
           <div class="dropzone rounded-xl p-10 text-center cursor-pointer">
@@ -267,16 +298,23 @@ window.ComplianceViews.submissions = function (root) {
       `).join('')}
     </div>
     <div class="card p-5">
-      <div class="font-medium mb-3">Recently approved (${completed.length})</div>
-      ${completed.length === 0 ? '<div class="text-sm text-slate-500">No approvals yet.</div>' : completed.map(r => `
-        <div class="flex items-center justify-between py-3 border-b border-slate-800 last:border-0">
-          <div>
-            <div class="text-sm font-medium">${r.certName}</div>
-            <div class="text-xs text-slate-500">${r.vesselName} · ${r.session ? 'just now' : window.fmtRelative(r.decidedAt)}</div>
+      <div class="font-medium mb-3">Recent decisions (${completed.length})</div>
+      ${completed.length === 0 ? '<div class="text-sm text-slate-500">No decisions yet.</div>' : completed.map(r => {
+        const pillClass = r.decision === 'approved' ? 'pill-ok'
+          : r.decision === 'rejected' ? 'pill-bad' : 'pill-warn';
+        const showNotes = r.decision !== 'approved' && r.reviewerNotes;
+        return `
+        <div class="py-3 border-b border-slate-800 last:border-0">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="text-sm font-medium">${r.certName}</div>
+              <div class="text-xs text-slate-500">${r.vesselName} · ${r.session ? 'just now' : window.fmtRelative(r.decidedAt)}</div>
+            </div>
+            <span class="pill ${pillClass}">${r.decision.replace('-', ' ')}</span>
           </div>
-          <span class="pill pill-ok">Approved</span>
+          ${showNotes ? `<div class="text-xs italic text-slate-300 mt-2">Reviewer: ${r.reviewerNotes}</div>` : ''}
         </div>
-      `).join('')}
+      `;}).join('')}
     </div>
   `;
 };

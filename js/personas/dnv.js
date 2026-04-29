@@ -92,6 +92,9 @@ function wireDecision(sub) {
 }
 
 function decide(sub, decision) {
+  const notesEl = document.getElementById('reviewer-notes');
+  const reviewerNotes = (notesEl && notesEl.value.trim()) || '';
+
   window.updateState(state => {
     const queued = state.dnvQueue.find(x => x.id === sub.id);
     if (!queued) return;
@@ -104,19 +107,31 @@ function decide(sub, decision) {
         if (decision === 'approved') cert.status = 'approved';
         else if (decision === 'changes-requested') cert.status = 'partial';
         else if (decision === 'rejected') cert.status = 'missing';
+        // On non-approval, clear stale uploads/findings so the re-submit flow starts clean.
+        // The submission itself already snapshotted these into sub.docs.
+        if (decision !== 'approved') {
+          cert.uploadedDocs = [];
+          cert.aiFindings = [];
+        }
       }
     }
 
     state.completedReviews.unshift({
-      id: sub.id, vesselName: sub.vesselName, certName: sub.certName,
-      submittedBy: sub.submittedBy, decidedAt: new Date().toISOString(), decision, session: true,
+      id: sub.id, vesselName: sub.vesselName,
+      certId: sub.certId, certName: sub.certName,
+      componentId: sub.componentId, componentName: sub.componentName,
+      submittedBy: sub.submittedBy, decidedAt: new Date().toISOString(),
+      decision, reviewerNotes, session: true,
     });
     state.dnvQueue = state.dnvQueue.filter(x => x.id !== sub.id);
     state.selectedSubmissionId = null;
 
     const verb = decision === 'approved' ? 'approved' : decision === 'rejected' ? 'rejected' : 'requested changes to';
+    const noteSuffix = reviewerNotes
+      ? `: ${reviewerNotes.length > 80 ? reviewerNotes.slice(0, 77) + '...' : reviewerNotes}`
+      : '.';
     state.recentActivity.unshift({ at: new Date().toISOString(), persona: 'dnv', session: true,
-      text: `DNV ${verb} ${sub.certName}.` });
+      text: `DNV ${verb} ${sub.certName}${noteSuffix}` });
   });
   window.toast(`${sub.certName} · ${decision.replace('-', ' ')}`);
 }
