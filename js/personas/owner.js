@@ -291,27 +291,108 @@ window.OwnerViews['asset-value'] = function (root) {
         <div style="height:280px"><canvas id="valueChart"></canvas></div>
       </div>
 
-      <div class="card p-6 col-span-12">
-        <div class="font-medium mb-4">Value unlocked by certification</div>
-        <div class="grid grid-cols-2 gap-3">
-          ${breakdown.map(b => `
-            <div class="flex items-center justify-between bg-slate-900/50 rounded-lg p-4 border border-slate-800">
-              <div>
-                <div class="text-slate-200">${b.name}</div>
-                <div class="text-xs text-slate-500">${b.regulation}</div>
-              </div>
-              <div class="text-right">
-                <div class="text-teal-300 font-semibold">+${window.fmtEUR(b.upside)}</div>
-                <div class="text-xs text-slate-500">${b.status === 'approved' || b.status === 'compliant' ? 'unlocked' : 'pending'}</div>
-              </div>
-            </div>
-          `).join('')}
+      <div class="col-span-12">
+        <div class="flex items-center justify-between mb-3">
+          <div class="font-medium">Value contribution by criterion</div>
+          <div class="text-xs text-slate-500">Scientific Committee framework · weights ratified 2026-Q1</div>
         </div>
+        <div class="grid grid-cols-12 gap-4">
+          ${criterionCards(v)}
+        </div>
+      </div>
+
+      <div class="col-span-12">
+        <details class="card p-5 group">
+          <summary class="cursor-pointer text-sm text-slate-300 hover:text-teal-300 list-none flex items-center justify-between">
+            <span>View regulation-level detail</span>
+            <i data-lucide="chevron-down" class="w-4 h-4 transition-transform group-open:rotate-180"></i>
+          </summary>
+          <div class="mt-4 grid grid-cols-2 gap-3">
+            ${breakdown.map(b => `
+              <div class="flex items-center justify-between bg-slate-900/50 rounded-lg p-4 border border-slate-800">
+                <div>
+                  <div class="text-slate-200">${b.name}</div>
+                  <div class="text-xs text-slate-500">${b.regulation}</div>
+                </div>
+                <div class="text-right">
+                  <div class="text-teal-300 font-semibold">+${window.fmtEUR(b.upside)}</div>
+                  <div class="text-xs text-slate-500">${b.status === 'approved' || b.status === 'compliant' ? 'unlocked' : 'pending'}</div>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </details>
       </div>
     </div>
   `;
   window.renderValueChart('valueChart', v);
 };
+
+// Criterion-level breakdown for the Asset Value page.
+// Visual ratio = compliantCount / total (drives bar color + X-of-Y label).
+// Financial contribution uses CERT_WEIGHTS partial credit so currentContribution
+// tracks vessel.currentValue once recomputeAll has run.
+function criterionCards(v) {
+  const fw = window.demoState.criteriaFramework || [];
+  const floor = v.nominalValue * 0.80;
+  const totalUpside = v.projectedValue - floor;
+  const W = { missing: 0, partial: 50, 'pending-review': 75, compliant: 100, approved: 100 };
+
+  const certsById = {};
+  Object.values(v.components).forEach(c => {
+    c.certifications.forEach(cert => { certsById[cert.id] = cert; });
+  });
+
+  return fw.map(crit => {
+    const items = crit.certIds.map(id => certsById[id]).filter(Boolean);
+    const total = items.length;
+    if (total === 0) return ''; // criterion has no regs on this vessel
+    const compliantCount = items.filter(c => c.status === 'compliant' || c.status === 'approved').length;
+    const displayPct = Math.round((compliantCount / total) * 100);
+    const mathRatio = items.reduce((s, c) => s + (W[c.status] ?? 0), 0) / total / 100;
+    const projectedContribution = crit.weight * v.projectedValue;
+    const currentContribution = crit.weight * (floor + totalUpside * mathRatio);
+    const barColor = displayPct >= 80 ? '#2dd4bf' : displayPct >= 60 ? '#f59e0b' : '#fb7185';
+    const weightPct = Math.round(crit.weight * 100);
+
+    return `
+      <div class="card p-5 col-span-4">
+        <div class="flex items-start justify-between gap-2 mb-2">
+          <div class="font-semibold">${crit.name}</div>
+          <span class="pill" style="background:rgba(45,212,191,.12);color:#5eead4;border:1px solid rgba(45,212,191,.3);">${weightPct}%</span>
+        </div>
+        <div class="text-xs text-slate-400 mb-2">${compliantCount} of ${total} regulations compliant</div>
+        <div class="h-1.5 rounded-full bg-slate-800 overflow-hidden mb-4">
+          <div class="h-full" style="width:${displayPct}%;background:${barColor};transition:width .8s"></div>
+        </div>
+        <div class="flex items-end justify-between">
+          <div>
+            <div class="text-xs text-slate-500">Current contribution</div>
+            <div class="text-lg font-semibold text-slate-100">${window.fmtEUR(currentContribution)}</div>
+          </div>
+          <div class="text-right">
+            <div class="text-xs text-slate-500">At 100%</div>
+            <div class="text-sm text-teal-300 font-semibold">${window.fmtEUR(projectedContribution)}</div>
+          </div>
+        </div>
+        <details class="mt-4 group">
+          <summary class="cursor-pointer text-xs text-slate-400 hover:text-teal-300 list-none flex items-center gap-1">
+            <i data-lucide="chevron-right" class="w-3 h-3 transition-transform group-open:rotate-90"></i>
+            <span>${total} regulation${total === 1 ? '' : 's'}</span>
+          </summary>
+          <div class="mt-2 space-y-1.5">
+            ${items.map(c => `
+              <div class="flex items-center justify-between gap-2 text-xs">
+                <div class="text-slate-300 truncate">${c.name}</div>
+                ${window.statusPill(c.status)}
+              </div>
+            `).join('')}
+          </div>
+        </details>
+      </div>
+    `;
+  }).join('');
+}
 
 function collectValueBreakdown(v) {
   const initial = window.INITIAL_STATE.vessels[v.id];
