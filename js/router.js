@@ -14,18 +14,24 @@ window.NAV = {
     { view: 'review-queue',  label: 'Review Queue',    icon: 'inbox' },
     { view: 'completed',     label: 'Completed',       icon: 'check-circle-2' },
   ],
+  scientific: [
+    { view: 'framework',     label: 'Criteria Framework', icon: 'book-open' },
+    { view: 'coverage',      label: 'Coverage',           icon: 'layers' },
+  ],
 };
 
 window.DEFAULT_VIEW = {
   owner: 'dashboard',
   compliance: 'my-components',
   dnv: 'review-queue',
+  scientific: 'framework',
 };
 
 window.PERSONA_LABELS = {
   owner: 'Captain Rao — Delhi Star Owner',
   compliance: 'MarinePro Engineering Ltd.',
   dnv: 'DNV — Maritime Classification',
+  scientific: 'Scientific Committee · Aurora Vault',
 };
 
 window.renderSidebar = function () {
@@ -50,6 +56,8 @@ window.renderSidebar = function () {
     footer.innerHTML = `<div class="text-slate-400 mb-1">Signed in as</div><div class="text-slate-300">MarinePro Engineering</div><div>Engine Room · Fuel · Accommodation</div>`;
   } else if (persona === 'dnv') {
     footer.innerHTML = `<div class="text-slate-400 mb-1">Reviewer</div><div class="text-slate-300">DNV AS · Oslo</div>`;
+  } else if (persona === 'scientific') {
+    footer.innerHTML = `<div class="text-slate-400 mb-1">Committee</div><div class="text-slate-300">Aurora Vault</div><div>Ratified 2026-Q1</div>`;
   } else {
     footer.innerHTML = `<div class="text-slate-400 mb-1">Principal</div><div class="text-slate-300">Captain Rao</div><div>Royal Board · Delhi Star</div>`;
   }
@@ -66,7 +74,7 @@ window.render = function () {
 
   const root = document.getElementById('view-root');
   root.innerHTML = '';
-  const viewsByPersona = { owner: window.OwnerViews, compliance: window.ComplianceViews, dnv: window.DnvViews };
+  const viewsByPersona = { owner: window.OwnerViews, compliance: window.ComplianceViews, dnv: window.DnvViews, scientific: window.ScientificViews };
   const views = viewsByPersona[persona];
   const fn = views && views[view];
   if (fn) {
