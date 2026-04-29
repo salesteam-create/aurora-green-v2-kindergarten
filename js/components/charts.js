@@ -102,8 +102,19 @@ window.renderValueChart = function (canvasId, vessel) {
   }));
   history.push({ date: 'now', value: vessel.currentValue });
 
-  const labels = history.map(h => h.date);
-  const actual = history.map(h => h.value);
+  // Forward floor projection if maintenance lapses.
+  const proj30 = window.computeDecayProjection(vessel.id, 1);
+  const proj90 = window.computeDecayProjection(vessel.id, 3);
+
+  const labels = history.map(h => h.date).concat(['+30d', '+90d']);
+  const actualMs = history.map(h => h.value / 1e6).concat([null, null]);
+  // Floor series: null up to and including the second-to-last historical point,
+  // start at "now" so the dashed segment continues from the solid line.
+  const floorMs = labels.map(() => null);
+  floorMs[history.length - 1] = vessel.currentValue / 1e6; // anchor at "now"
+  if (proj30) floorMs[history.length] = proj30.projectedValue / 1e6;
+  if (proj90) floorMs[history.length + 1] = proj90.projectedValue / 1e6;
+
   const projectedM = Math.round(vessel.projectedValue / 1e6);
 
   window._charts[canvasId] = new Chart(ctx, {
@@ -111,9 +122,16 @@ window.renderValueChart = function (canvasId, vessel) {
     data: {
       labels,
       datasets: [
-        { label: 'Value (€M)', data: actual.map(v => v / 1e6),
+        { label: 'Actual', data: actualMs,
           borderColor: '#2dd4bf', backgroundColor: 'rgba(45,212,191,.15)',
-          fill: true, tension: 0.3, pointRadius: 3, borderWidth: 2 },
+          fill: true, tension: 0.3, pointRadius: 3, borderWidth: 2,
+          spanGaps: false },
+        { label: 'Floor if maintenance lapses', data: floorMs,
+          borderColor: '#fb7185', backgroundColor: 'transparent',
+          borderDash: [6, 4], borderWidth: 2, tension: 0.25,
+          fill: false, spanGaps: true,
+          pointRadius: (c) => c.dataIndex === labels.length - 1 ? 5 : 0,
+          pointBackgroundColor: '#fb7185' },
       ],
     },
     options: {
@@ -123,11 +141,16 @@ window.renderValueChart = function (canvasId, vessel) {
         legend: { display: false },
         title: {
           display: true,
-          text: '→ €' + projectedM + 'M projected at 100% compliance',
-          color: '#fbbf24',
+          text: 'Solid: actual · Dashed: floor if maintenance lapses · → €' + projectedM + 'M at 100%',
+          color: '#94a3b8',
           align: 'end',
           font: { size: 12, weight: 'normal' },
           padding: { bottom: 6 },
+        },
+        tooltip: {
+          callbacks: {
+            label: (item) => item.dataset.label + ': €' + Math.round(item.parsed.y) + 'M',
+          },
         },
       },
       scales: {

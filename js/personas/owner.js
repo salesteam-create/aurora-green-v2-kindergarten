@@ -114,6 +114,8 @@ window.OwnerViews.dashboard = function (root) {
           `;}).join('')}
         </div>
       </div>
+
+      ${atRiskPanelHTML(v)}
     </div>
     <div id="comp-modal-root"></div>
   `;
@@ -209,6 +211,79 @@ function openComponentModal(c) {
   document.getElementById('comp-modal-close').addEventListener('click', close);
   const esc = (e) => { if (e.key === 'Escape') { close(); document.removeEventListener('keydown', esc); } };
   document.addEventListener('keydown', esc);
+}
+
+function atRiskPanelHTML(v) {
+  const proj = window.computeDecayProjection(v.id, 3);
+  if (!proj) return '';
+  const scoreDelta = v.euReadinessScore - proj.projectedScore;
+  const valueDelta = v.currentValue - proj.projectedValue;
+
+  if (proj.atRiskCerts.length === 0) {
+    return `
+      <div class="card p-5 col-span-12" style="border-color:rgba(45,212,191,.25);background:rgba(45,212,191,.04);">
+        <div class="flex items-center gap-3 text-teal-300">
+          <i data-lucide="shield-check" class="w-5 h-5"></i>
+          <div class="font-medium">No regulations at risk in the next 90 days.</div>
+        </div>
+      </div>
+    `;
+  }
+
+  const items = proj.atRiskCerts.slice(0, 3);
+  return `
+    <div class="card p-6 col-span-12" style="border-color:rgba(251,113,133,.3);background:rgba(251,113,133,.05);">
+      <div class="flex items-center justify-between mb-2">
+        <div>
+          <div class="font-medium text-slate-100">What's at risk · next 90 days</div>
+          <div class="text-xs text-slate-400 mt-0.5">Compliance decays without renewal. Here's the floor in 90 days if nothing is touched.</div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-12 gap-5 mt-4">
+        <div class="col-span-3">
+          <div class="text-xs text-slate-400">Score floor</div>
+          <div class="mt-1 flex items-baseline gap-2">
+            <div class="text-2xl font-semibold text-slate-200">${v.euReadinessScore}</div>
+            <i data-lucide="arrow-right" class="w-4 h-4 text-slate-500"></i>
+            <div class="text-2xl font-semibold text-rose-300">${proj.projectedScore}</div>
+          </div>
+          <div class="text-xs text-rose-300 mt-1 inline-flex items-center gap-1">
+            <i data-lucide="trending-down" class="w-3.5 h-3.5"></i>
+            <span>−${scoreDelta} pts</span>
+          </div>
+        </div>
+
+        <div class="col-span-4">
+          <div class="text-xs text-slate-400">Value floor</div>
+          <div class="mt-1 flex items-baseline gap-2">
+            <div class="text-2xl font-semibold text-slate-200">${window.fmtEUR(v.currentValue)}</div>
+            <i data-lucide="arrow-right" class="w-4 h-4 text-slate-500"></i>
+            <div class="text-2xl font-semibold text-rose-300">${window.fmtEUR(proj.projectedValue)}</div>
+          </div>
+          <div class="text-xs text-rose-300 mt-1 inline-flex items-center gap-1">
+            <i data-lucide="trending-down" class="w-3.5 h-3.5"></i>
+            <span>−${window.fmtEUR(valueDelta)}</span>
+          </div>
+        </div>
+
+        <div class="col-span-5">
+          <div class="text-xs text-slate-400 mb-2">Regulations approaching renewal</div>
+          <div class="space-y-1.5">
+            ${items.map(c => `
+              <div class="flex items-center justify-between gap-2 text-sm border border-rose-400/20 rounded-md px-3 py-2 bg-rose-400/5">
+                <div class="min-w-0">
+                  <div class="text-slate-200 truncate">${c.name}</div>
+                  <div class="text-xs text-slate-500 truncate">${c.componentName}</div>
+                </div>
+                <div class="text-xs text-rose-300 whitespace-nowrap">expires in ${c.monthsToExpiry} month${c.monthsToExpiry === 1 ? '' : 's'}</div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
 }
 
 function collectCriticalGaps(v) {
