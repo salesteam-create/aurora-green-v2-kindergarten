@@ -284,7 +284,96 @@
       { date: '2026-03', score: 60 },
       { date: '2026-04', score: 62 },
     ],
+
+    // Five-pillar Scientific Committee framework. Weights sum to 1.0.
+    // Every cert id in INITIAL_STATE maps to exactly one pillar.
+    criteriaFramework: [
+      {
+        id: 'esg',
+        name: 'ESG & Environment',
+        description: 'Hazardous-material inventories, ballast-water management, and circular-economy posture for EU port-state acceptance.',
+        weight: 0.30,
+        ratifiedAt: '2026-01-15',
+        certIds: ['ihm-part-i', 'ballast-water', 'ml-bwm'],
+      },
+      {
+        id: 'emissions',
+        name: 'Emissions & Air Quality',
+        description: 'MARPOL Annex VI air emissions, IOPP, EU ETS, MRV, and CII carbon-intensity discipline across the operating profile.',
+        weight: 0.25,
+        ratifiedAt: '2026-01-15',
+        certIds: ['marpol-annex-vi', 'iopp', 'eu-ets', 'cii-rating',
+                  'ml-marpol-vi', 'ml-eu-mrv', 'ml-cii', 'ml-grey-black'],
+      },
+      {
+        id: 'safety',
+        name: 'Safety Management & Navigation',
+        description: 'ISM safety management, SOLAS V navigation safety, and LSA life-saving appliance readiness — operational integrity at sea.',
+        weight: 0.20,
+        ratifiedAt: '2026-01-15',
+        certIds: ['ism-code', 'solas-v', 'lsa', 'ml-ism', 'ml-solas-v', 'ml-lsa'],
+      },
+      {
+        id: 'structural',
+        name: 'Structural & Class',
+        description: 'Hull construction, anti-fouling, and Enhanced Survey Programme integrity — class-society endorsements and structural health.',
+        weight: 0.15,
+        ratifiedAt: '2026-01-15',
+        certIds: ['solas-xii', 'afs', 'esp', 'ml-solas-ii', 'ml-afs'],
+      },
+      {
+        id: 'labor',
+        name: 'Labor & Welfare',
+        description: 'MLC 2006 seafarer welfare, accommodation standards, and onboard medical care — crew rights and human factors.',
+        weight: 0.10,
+        ratifiedAt: '2026-01-15',
+        certIds: ['mlc', 'mlc-title-4', 'ml-mlc'],
+      },
+    ],
   };
+
+  // ----- Per-cert decay defaults (renewal-cycle months + last-validated date) -----
+  // Three Delhi Star certs are tuned to expire within ~90 days of 2026-04-29 so the
+  // decay projection has live at-risk items to surface. Others are fresh.
+  const DECAY_BY_ID = {
+    // Annual (~12mo)
+    'marpol-annex-vi': { decay: 12, validated: '2025-09-01' },
+    'iopp':            { decay: 12, validated: '2025-12-01' },
+    'eu-ets':          { decay: 12, validated: '2025-11-15' },
+    'cii-rating':      { decay: 12, validated: '2025-12-20' },
+    'solas-v':         { decay: 12, validated: '2025-09-15' },
+    'lsa':             { decay: 12, validated: '2025-08-01' },
+    'ml-marpol-vi':    { decay: 12, validated: '2025-09-15' },
+    'ml-eu-mrv':       { decay: 12, validated: '2025-10-01' },
+    'ml-cii':          { decay: 12, validated: '2025-11-01' },
+    'ml-grey-black':   { decay: 12, validated: '2025-08-01' },
+    'ml-solas-v':      { decay: 12, validated: '2025-09-15' },
+    'ml-lsa':          { decay: 12, validated: '2025-08-01' },
+    // Bi-annual SMS audit cycle (~24mo)
+    'ism-code':        { decay: 24, validated: '2024-06-15' }, // at-risk: expires 2026-06-15
+    'ml-ism':          { decay: 24, validated: '2025-08-01' },
+    // Class / 5-year survey cycle (~60mo)
+    'solas-xii':       { decay: 60, validated: '2021-07-15' }, // at-risk: expires 2026-07-15
+    'afs':             { decay: 60, validated: '2021-06-15' }, // at-risk: expires 2026-06-15
+    'esp':             { decay: 60, validated: '2024-01-15' },
+    'ihm-part-i':      { decay: 60, validated: '2025-01-01' },
+    'ballast-water':   { decay: 60, validated: '2022-11-01' },
+    'mlc':             { decay: 60, validated: '2025-05-01' },
+    'mlc-title-4':     { decay: 60, validated: '2025-05-01' },
+    'ml-solas-ii':     { decay: 60, validated: '2024-03-01' },
+    'ml-afs':          { decay: 60, validated: '2023-05-01' },
+    'ml-bwm':          { decay: 60, validated: '2021-09-01' },
+    'ml-mlc':          { decay: 60, validated: '2025-05-01' },
+  };
+  Object.values(window.INITIAL_STATE.vessels).forEach(v => {
+    Object.values(v.components).forEach(c => {
+      c.certifications.forEach(cert => {
+        const d = DECAY_BY_ID[cert.id] || { decay: 60, validated: '2025-01-01' };
+        cert.decayWindowMonths = d.decay;
+        cert.lastValidatedAt = d.validated;
+      });
+    });
+  });
 
   window.demoState = structuredClone(window.INITIAL_STATE);
 
@@ -338,6 +427,53 @@
 
   window.recomputeAll = function () {
     Object.values(window.demoState.vessels).forEach(recomputeVessel);
+  };
+
+  // Pure projection: what would the score/value be if we let decay run for N months?
+  // Does not mutate live state. Uses the same CERT_WEIGHTS averaging the live recompute
+  // uses, but applies the result as a *delta* off the displayed score so the seeded
+  // baseline (which is artificially below the formula) is preserved.
+  window.computeDecayProjection = function (vesselId, monthsAhead) {
+    const live = window.demoState.vessels[vesselId];
+    if (!live) return null;
+    const today = new Date('2026-04-29');
+    const horizon = new Date(today);
+    horizon.setMonth(horizon.getMonth() + monthsAhead);
+
+    const avgFromCerts = (vessel) => {
+      const comps = Object.values(vessel.components);
+      const compScore = (comp) => {
+        const t = comp.certifications.reduce((s, c) => s + (CERT_WEIGHTS[c.status] ?? 0), 0);
+        return t / comp.certifications.length;
+      };
+      return comps.reduce((s, c) => s + compScore(c), 0) / comps.length;
+    };
+
+    const baseline = avgFromCerts(live);
+
+    const clone = structuredClone(live);
+    const atRiskCerts = [];
+    Object.values(clone.components).forEach(comp => {
+      comp.certifications.forEach(cert => {
+        if ((cert.status !== 'compliant' && cert.status !== 'approved')
+            || !cert.lastValidatedAt || !cert.decayWindowMonths) return;
+        const expiry = new Date(cert.lastValidatedAt);
+        expiry.setMonth(expiry.getMonth() + cert.decayWindowMonths);
+        if (expiry < horizon) {
+          const monthsToExpiry = Math.max(0, Math.round((expiry - today) / (30.44 * 86400000)));
+          atRiskCerts.push({ name: cert.name, monthsToExpiry, componentName: comp.name });
+          cert.status = 'partial';
+        }
+      });
+    });
+
+    const decayed = avgFromCerts(clone);
+    const delta = baseline - decayed;
+    const projectedScore = Math.max(0, Math.round(live.euReadinessScore - delta));
+    const floor = live.nominalValue * 0.80;
+    const projectedValue = Math.round(floor + (live.projectedValue - floor) * (projectedScore / 100));
+
+    return { projectedScore, projectedValue, atRiskCerts };
   };
 
   window.updateState = function (mutator) {
