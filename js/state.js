@@ -258,8 +258,10 @@
 
     completedReviews: [
       {
-        id: 'done-1', vesselName: 'Marina Luna', certName: 'SOLAS Ch. V — Navigation Safety',
+        id: 'done-1', vesselName: 'Marina Luna',
+        certId: 'ml-solas-v', certName: 'SOLAS Ch. V — Navigation Safety',
         submittedBy: 'NordicCert A/S', decidedAt: '2026-04-15T09:00:00Z', decision: 'approved',
+        reviewerNotes: 'ECDIS, AIS and VDR records all in good order. Approved without observation.',
       },
     ],
 
