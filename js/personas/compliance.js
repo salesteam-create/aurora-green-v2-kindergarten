@@ -195,6 +195,8 @@ function reviewerFeedbackCard(feedback) {
   `;
 }
 
+function certDetailHTML(cert) {
+  const uploaded = cert.uploadedDocs.length > 0;
   return `
     <div class="card p-6 space-y-5">
       <div>
