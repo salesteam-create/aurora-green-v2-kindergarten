@@ -318,3 +318,5 @@ window.ComplianceViews.submissions = function (root) {
     </div>
   `;
 };
+
+window.ComplianceViews.suppliers = (root) => window.renderSuppliers(root);
