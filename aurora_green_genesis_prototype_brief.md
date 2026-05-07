@@ -1,5 +1,20 @@
 # Aurora Green Genesis — Interactive Prototype Brief
 
+<!--
+v4 candidates (collected during iteration 3 vault-architecture rehearsal — triage with founder before iteration 4):
+
+- Validate the vault-door code instead of accepting any input. Adds gravity to the "restricted access" framing; could also gate different personas behind different codes.
+- Per-supplier drill-down: clicking a supplier row opens a profile (which certs they own, audit history, equity vesting curve). Today the table is read-only.
+- Compliance-aware All Assets filter: today MarinePro sees Marina Luna with a "No assignments" pill. Founder may prefer hiding non-assigned vaults entirely for the compliance role.
+- Innovation Pipeline functional: list of climate-tech / maritime-compliance startups under review by the Scientific Committee, status pills, decision log. Currently visible-only.
+- Multi-asset vaults: today every vault has exactly one asset. Architecture supports many (assetIds array), but no UI to switch assets within a vault.
+- Browser back/forward and shareable URLs: no hash router today, so navigation can't be deep-linked or replayed.
+- Locked-state Reset: if the demo gets stuck on the door, there's no reset affordance — the demo bar is hidden by design.
+- Vault creation flow: "+ New Private Vault" affordance for the SV shell so founders can demo onboarding a new client live.
+- Equity algorithm preview: the Suppliers footnote mentions an Olidata algorithm. A small "How this is computed" overlay would make the claim concrete.
+- DNV / Scientific Committee cross-vault visibility: today they're at SV level but only see one queue / one framework. Could surface a "vaults touched this week" digest.
+-->
+
 **For:** Claude Code session
 **Purpose:** Build an interactive HTML prototype of the Aurora Green Genesis (AGG) maritime compliance platform, used as a sales demo for prospective clients, investors, and certifying partners.
 **Timeline:** 1–2 weeks, solo developer.

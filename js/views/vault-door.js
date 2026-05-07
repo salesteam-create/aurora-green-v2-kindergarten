@@ -31,7 +31,7 @@ window.renderVaultDoor = function (root) {
         <h1 class="text-3xl font-semibold text-slate-100 mb-2">Aurora Green Genesis</h1>
         <p class="text-sm text-slate-400 tracking-wider uppercase mb-8">Scientific Vault · Restricted Access</p>
         <form id="vault-door-form" class="flex flex-col items-center gap-3">
-          <input type="password" id="vault-code" value="vault-2026"
+          <input type="password" id="vault-code" value="vault-2026" autofocus
                  class="bg-slate-800 border border-slate-700 rounded-md px-4 py-2.5 text-slate-100 text-center w-72 focus:outline-none focus:border-teal-400 tracking-widest" />
           <button type="submit"
                   class="px-8 py-2.5 rounded-md bg-teal-400 text-slate-900 font-semibold hover:bg-teal-300 transition-colors">

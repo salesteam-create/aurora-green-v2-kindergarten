@@ -528,7 +528,12 @@
   };
 
   window.resetDemo = function () {
+    // Preserve the active persona across resets so the demonstrator stays
+    // in the role they were showing — they only meant to clear domain state.
+    const keepPersona = window.demoState.currentPersona;
     window.demoState = structuredClone(window.INITIAL_STATE);
+    window.demoState.currentPersona = keepPersona;
+    window.demoState.currentView = window.DEFAULT_VIEW[keepPersona];
     // Reset skips the door — drop straight into the SV shell.
     window.demoState.vaultStage = 'sv-shell';
     window.demoState.currentVaultId = null;
