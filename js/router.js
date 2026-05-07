@@ -19,6 +19,7 @@ window.NAV = {
   scientific: [
     { view: 'framework',     label: 'Criteria Framework', icon: 'book-open' },
     { view: 'coverage',      label: 'Coverage',           icon: 'layers' },
+    { view: 'innovation',    label: 'Innovation Pipeline', icon: 'sparkles', disabled: true },
   ],
 };
 
@@ -65,12 +66,23 @@ window.renderSidebar = function () {
         <div class="my-2 border-t border-slate-800"></div>`;
     }
     const items = window.NAV[persona];
-    html += items.map(it => `
-      <div class="nav-item ${window.demoState.currentView === it.view ? 'active' : ''}" data-view="${it.view}">
-        <i data-lucide="${it.icon}" class="w-4 h-4"></i>
-        <span>${it.label}</span>
-      </div>
-    `).join('');
+    html += items.map(it => {
+      if (it.disabled) {
+        return `
+          <div class="nav-item flex items-center justify-between" style="opacity:.4;cursor:not-allowed;">
+            <span class="flex items-center gap-2.5">
+              <i data-lucide="${it.icon}" class="w-4 h-4"></i>
+              <span>${it.label}</span>
+            </span>
+            <span class="pill pill-neutral" style="font-size:9px;padding:2px 6px;">Soon</span>
+          </div>`;
+      }
+      return `
+        <div class="nav-item ${window.demoState.currentView === it.view ? 'active' : ''}" data-view="${it.view}">
+          <i data-lucide="${it.icon}" class="w-4 h-4"></i>
+          <span>${it.label}</span>
+        </div>`;
+    }).join('');
     nav.innerHTML = html;
     nav.querySelectorAll('[data-view]').forEach(el => {
       el.addEventListener('click', () => {
@@ -109,7 +121,7 @@ window.renderSidebar = function () {
   } else if (persona === 'dnv') {
     footer.innerHTML = `<div class="text-slate-400 mb-1">Reviewer</div><div class="text-slate-300">DNV AS · Oslo</div>`;
   } else if (persona === 'scientific') {
-    footer.innerHTML = `<div class="text-slate-400 mb-1">Committee</div><div class="text-slate-300">Aurora Vault</div><div>Ratified 2026-Q1</div>`;
+    footer.innerHTML = `<div class="text-slate-400 mb-1">Scientific Committee</div><div class="text-slate-300">Q1 2026 framework</div><div>ratified</div>`;
   } else {
     footer.innerHTML = `<div class="text-slate-400 mb-1">Principal</div><div class="text-slate-300">Captain Rao</div><div>Royal Board · Delhi Star</div>`;
   }

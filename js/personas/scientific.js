@@ -126,3 +126,18 @@ window.ScientificViews.coverage = function (root) {
     </div>
   `;
 };
+
+window.ScientificViews.innovation = function (root) {
+  root.innerHTML = `
+    <div class="card p-8 text-center">
+      <div class="w-12 h-12 rounded-full bg-teal-400/10 mx-auto mb-4 flex items-center justify-center">
+        <i data-lucide="sparkles" class="w-6 h-6 text-teal-300"></i>
+      </div>
+      <div class="text-xl font-semibold mb-1">Innovation Pipeline</div>
+      <div class="text-sm text-slate-400 max-w-md mx-auto">
+        Reviewing emerging climate-tech and maritime-compliance startups for inclusion in the Aurora ecosystem. Coming in the next iteration.
+      </div>
+    </div>
+  `;
+  if (window.lucide) lucide.createIcons();
+};
