@@ -38,22 +38,70 @@ window.PERSONA_LABELS = {
 
 window.renderSidebar = function () {
   const persona = window.demoState.currentPersona;
-  const items = window.NAV[persona];
+  const stage = window.demoState.vaultStage;
   const nav = document.getElementById('sidebar-nav');
-  nav.innerHTML = items.map(it => `
-    <div class="nav-item ${window.demoState.currentView === it.view ? 'active' : ''}" data-view="${it.view}">
-      <i data-lucide="${it.icon}" class="w-4 h-4"></i>
-      <span>${it.label}</span>
-    </div>
-  `).join('');
-  nav.querySelectorAll('.nav-item').forEach(el => {
-    el.addEventListener('click', () => {
-      window.demoState.currentView = el.dataset.view;
-      window.render();
+
+  if (stage === 'locked') return;
+
+  const level = window.PERSONA_LEVEL[persona];
+  let html = '';
+
+  if (stage === 'sv-shell' && level === 'vault') {
+    html = `
+      <div class="nav-item active">
+        <i data-lucide="grid-3x3" class="w-4 h-4"></i>
+        <span>All Assets</span>
+      </div>`;
+    nav.innerHTML = html;
+  } else {
+    if (stage === 'in-vault') {
+      html += `
+        <div class="nav-item" data-back-to-shell="1">
+          <i data-lucide="arrow-left" class="w-4 h-4"></i>
+          <span>All Assets</span>
+        </div>
+        <div class="my-2 border-t border-slate-800"></div>`;
+    }
+    const items = window.NAV[persona];
+    html += items.map(it => `
+      <div class="nav-item ${window.demoState.currentView === it.view ? 'active' : ''}" data-view="${it.view}">
+        <i data-lucide="${it.icon}" class="w-4 h-4"></i>
+        <span>${it.label}</span>
+      </div>
+    `).join('');
+    nav.innerHTML = html;
+    nav.querySelectorAll('[data-view]').forEach(el => {
+      el.addEventListener('click', () => {
+        window.demoState.currentView = el.dataset.view;
+        window.render();
+      });
     });
-  });
+    const back = nav.querySelector('[data-back-to-shell]');
+    if (back) {
+      back.addEventListener('click', () => {
+        window.updateState(s => {
+          s.vaultStage = 'sv-shell';
+          s.currentVaultId = null;
+          s.currentView = window.DEFAULT_VIEW[s.currentPersona];
+        });
+      });
+    }
+  }
 
   const footer = document.getElementById('sidebar-footer');
+  if (stage === 'sv-shell' && level === 'vault') {
+    footer.innerHTML = `<div class="text-slate-400 mb-1">Aurora Vault</div><div class="text-slate-300">Asset Index</div>`;
+    lucide.createIcons();
+    return;
+  }
+  if (stage === 'in-vault') {
+    const vault = window.demoState.privateVaults[window.demoState.currentVaultId];
+    if (vault) {
+      footer.innerHTML = `<div class="text-slate-400 mb-1">Private Vault</div><div class="text-slate-300">${vault.name}</div><div>${vault.clientName}</div>`;
+      lucide.createIcons();
+      return;
+    }
+  }
   if (persona === 'compliance') {
     footer.innerHTML = `<div class="text-slate-400 mb-1">Signed in as</div><div class="text-slate-300">MarinePro Engineering</div><div>Engine Room · Fuel · Accommodation</div>`;
   } else if (persona === 'dnv') {
@@ -75,7 +123,9 @@ window.render = function () {
   document.body.classList.toggle('vault-locked', stage === 'locked');
 
   if (stage === 'locked') {
-    root.innerHTML = '<div class="text-slate-300 p-12 text-center text-lg">Vault Door coming next step</div>';
+    root.innerHTML = '';
+    window.renderVaultDoor(root);
+    lucide.createIcons();
     return;
   }
 
@@ -85,9 +135,9 @@ window.render = function () {
   const level = window.PERSONA_LEVEL[persona];
 
   if (stage === 'sv-shell' && level === 'vault') {
-    document.getElementById('sidebar-nav').innerHTML = '';
-    document.getElementById('sidebar-footer').innerHTML = '';
-    root.innerHTML = '<div class="text-slate-300 p-12 text-center text-lg">All Assets coming next step</div>';
+    window.renderSidebar();
+    root.innerHTML = '';
+    window.renderAllAssets(root);
     lucide.createIcons();
     return;
   }

@@ -522,7 +522,7 @@
     window.demoState.vaultStage = 'sv-shell';
     window.demoState.currentVaultId = null;
     if (window.render) window.render();
-    window.toast && window.toast('Demo reset to initial state.');
+    window.toast && window.toast('Demo reset · vault unlocked, state cleared.');
   };
 
   window.logActivity = function (text) {

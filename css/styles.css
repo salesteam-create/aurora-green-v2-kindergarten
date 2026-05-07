@@ -9,6 +9,9 @@
 }
 body{background:var(--navy);color:#e5e7eb;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;}
 body.vault-locked #demo-bar, body.vault-locked aside { display: none; }
+.vault-dial { transition: transform 600ms ease-out; }
+.vault-dial.unlocking { animation: vault-unlock 600ms ease-out forwards; }
+@keyframes vault-unlock { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 .glass{background:rgba(23,37,68,.6);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.06);}
 .card{background:#172544;border:1px solid rgba(255,255,255,.05);border-radius:14px;}
 .card-hover:hover{border-color:rgba(45,212,191,.35);}
