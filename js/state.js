@@ -16,6 +16,38 @@
     selectedCertId: null,
     selectedSubmissionId: null,
 
+    vaultStage: 'locked',
+    currentVaultId: null,
+    privateVaults: {
+      'sultan-vault': {
+        id: 'sultan-vault',
+        name: "Sultan's Vault",
+        clientName: 'Royal Board · Delhi Star',
+        description: 'Flagship superyacht · IMO 9876543',
+        assetIds: ['delhi-star'],
+        status: 'active',
+        createdAt: '2026-02-12',
+      },
+      'monaco-vault': {
+        id: 'monaco-vault',
+        name: 'Marina Luna Vault',
+        clientName: 'Mediterranean Holdings · Marina Luna',
+        description: 'Superyacht · IMO 9543210',
+        assetIds: ['marina-luna'],
+        status: 'active',
+        createdAt: '2026-03-04',
+      },
+      'equinor-vault': {
+        id: 'equinor-vault',
+        name: 'Equinor Platform Vault',
+        clientName: 'Equinor (placeholder)',
+        description: 'Offshore platform digital twin · onboarding',
+        assetIds: [],
+        status: 'placeholder',
+        createdAt: null,
+      },
+    },
+
     vessels: {
       'delhi-star': {
         id: 'delhi-star',
@@ -486,6 +518,9 @@
 
   window.resetDemo = function () {
     window.demoState = structuredClone(window.INITIAL_STATE);
+    // Reset skips the door — drop straight into the SV shell.
+    window.demoState.vaultStage = 'sv-shell';
+    window.demoState.currentVaultId = null;
     if (window.render) window.render();
     window.toast && window.toast('Demo reset to initial state.');
   };

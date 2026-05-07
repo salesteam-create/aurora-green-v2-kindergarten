@@ -27,6 +27,8 @@ window.DEFAULT_VIEW = {
   scientific: 'framework',
 };
 
+window.PERSONA_LEVEL = { owner: 'vault', compliance: 'vault', dnv: 'sv', scientific: 'sv' };
+
 window.PERSONA_LABELS = {
   owner: 'Captain Rao — Delhi Star Owner',
   compliance: 'MarinePro Engineering Ltd.',
@@ -67,12 +69,38 @@ window.renderSidebar = function () {
 window.render = function () {
   const persona = window.demoState.currentPersona;
   const view = window.demoState.currentView;
+  const stage = window.demoState.vaultStage;
+  const root = document.getElementById('view-root');
+
+  document.body.classList.toggle('vault-locked', stage === 'locked');
+
+  if (stage === 'locked') {
+    root.innerHTML = '<div class="text-slate-300 p-12 text-center text-lg">Vault Door coming next step</div>';
+    return;
+  }
+
   document.getElementById('persona-label').textContent = window.PERSONA_LABELS[persona];
   document.getElementById('persona-select').value = persona;
 
+  const level = window.PERSONA_LEVEL[persona];
+
+  if (stage === 'sv-shell' && level === 'vault') {
+    document.getElementById('sidebar-nav').innerHTML = '';
+    document.getElementById('sidebar-footer').innerHTML = '';
+    root.innerHTML = '<div class="text-slate-300 p-12 text-center text-lg">All Assets coming next step</div>';
+    lucide.createIcons();
+    return;
+  }
+
+  if (stage === 'in-vault') {
+    const vault = window.demoState.privateVaults[window.demoState.currentVaultId];
+    if (vault && vault.assetIds.length && !vault.assetIds.includes(window.demoState.selectedVesselId)) {
+      window.demoState.selectedVesselId = vault.assetIds[0];
+    }
+  }
+
   window.renderSidebar();
 
-  const root = document.getElementById('view-root');
   root.innerHTML = '';
   const viewsByPersona = { owner: window.OwnerViews, compliance: window.ComplianceViews, dnv: window.DnvViews, scientific: window.ScientificViews };
   const views = viewsByPersona[persona];
