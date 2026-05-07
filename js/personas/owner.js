@@ -546,3 +546,5 @@ window.OwnerViews.reports = function (root) {
     window.toast(`Download started · ${b.dataset.name}.pdf`);
   }));
 };
+
+window.OwnerViews.suppliers = (root) => window.renderSuppliers(root);

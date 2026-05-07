@@ -27,6 +27,12 @@
         assetIds: ['delhi-star'],
         status: 'active',
         createdAt: '2026-02-12',
+        suppliers: [
+          { id: 'marinepro', name: 'MarinePro Engineering Ltd.', role: 'Engine Room · Fuel & Emissions · Accommodation', shareEquityPct: 8.5, greenSharesPct: 12, certCounts: { compliant: 3, pending: 1, missing: 1 }, valueContribution: 22_400_000, status: 'active', joinedAt: '2026-01-20' },
+          { id: 'nordiccert', name: 'NordicCert A/S', role: 'Hull · Ballast Water · Bridge Nav', shareEquityPct: 6.2, greenSharesPct: 9, certCounts: { compliant: 4, pending: 0, missing: 0 }, valueContribution: 19_100_000, status: 'active', joinedAt: '2026-01-15' },
+          { id: 'seagreen', name: 'SeaGreen Marine Services', role: 'Deck & Safety · Cargo Tanks', shareEquityPct: 4.0, greenSharesPct: 7, certCounts: { compliant: 0, pending: 1, missing: 1 }, valueContribution: 8_700_000, status: 'active', joinedAt: '2026-02-08' },
+          { id: 'iso-acoustics', name: 'ISO Acoustics GmbH', role: 'Noise & vibration certification (pending onboarding)', shareEquityPct: 1.8, greenSharesPct: 3, certCounts: { compliant: 0, pending: 0, missing: 1 }, valueContribution: 0, status: 'pending', joinedAt: null },
+        ],
       },
       'monaco-vault': {
         id: 'monaco-vault',
@@ -36,6 +42,10 @@
         assetIds: ['marina-luna'],
         status: 'active',
         createdAt: '2026-03-04',
+        suppliers: [
+          { id: 'seagreen', name: 'SeaGreen Marine Services', role: 'All components (full delivery)', shareEquityPct: 14.0, greenSharesPct: 18, certCounts: { compliant: 7, pending: 0, missing: 1 }, valueContribution: 26_300_000, status: 'active', joinedAt: '2026-02-22' },
+          { id: 'monaco-tech', name: 'Monaco Yachting Tech', role: 'Bridge & Navigation upgrades', shareEquityPct: 2.0, greenSharesPct: 4, certCounts: { compliant: 1, pending: 0, missing: 0 }, valueContribution: 4_100_000, status: 'active', joinedAt: '2026-03-10' },
+        ],
       },
       'equinor-vault': {
         id: 'equinor-vault',
@@ -45,6 +55,7 @@
         assetIds: [],
         status: 'placeholder',
         createdAt: null,
+        suppliers: [],
       },
     },
 
