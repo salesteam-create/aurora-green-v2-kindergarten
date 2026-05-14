@@ -23,9 +23,7 @@ window.renderVaultDoor = function (root) {
             <g>${ticks.join('')}</g>
             <circle cx="160" cy="160" r="62" fill="#0f1a2e" stroke="#2dd4bf" stroke-width="2" stroke-opacity="0.5" />
             <polygon points="160,42 154,62 166,62" fill="#2dd4bf" />
-            <circle cx="160" cy="160" r="10" fill="#2dd4bf" />
-            <circle cx="160" cy="160" r="4" fill="#0f1a2e" />
-            <text x="160" y="200" text-anchor="middle" fill="#5eead4" font-size="12" font-weight="600" letter-spacing="3">AURORA</text>
+            <image href="aurora_green_logo__21__480.png" x="110" y="142" width="100" height="36" preserveAspectRatio="xMidYMid meet" />
           </svg>
         </div>
         <h1 class="text-3xl font-semibold text-slate-100 mb-2">Aurora Green Genesis</h1>
