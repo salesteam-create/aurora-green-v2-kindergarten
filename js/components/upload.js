@@ -73,19 +73,19 @@ window.wireUpload = function (container, { certId, onComplete }) {
 
 function fakeFilename(certId) {
   const map = {
-    'ihm-part-i': 'IHM_Part_I_Survey_DelhiStar_20260420.pdf',
-    'marpol-annex-vi': 'MARPOL_AnnexVI_Fuel_Cert_Q1_2026.pdf',
-    'solas-xii': 'SOLAS_XII_Structural_Survey.pdf',
-    'ism-code': 'ISM_SMC_Audit_2026.pdf',
-    'ballast-water': 'BWMS_Type_Approval_Cert.pdf',
-    'eu-ets': 'EU_ETS_Monitoring_Plan_2026.pdf',
-    'cii-rating': 'CII_Annual_Report_2025.pdf',
-    'iopp': 'IOPP_Certificate_Renewal_Application.pdf',
-    'lsa': 'Lifeboat_Service_Record_2026.pdf',
-    'afs': 'AFS_Declaration_Certificate.pdf',
-    'solas-v': 'SOLAS_V_Navigation_Equipment_Survey.pdf',
-    'mlc': 'MLC_DMLC_Part_II_2026.pdf',
-    'mlc-title-4': 'MLC_Title4_Medical_Stores_Log_2026.pdf',
+    'ihm-part-i': 'Avfallsplan_Solstrale_2026.pdf',
+    'marpol-annex-vi': 'Menyplan_Klimavurdering_Var_2026.pdf',
+    'solas-xii': 'Vedlikeholdsplan_Bygg_2026.pdf',
+    'ism-code': 'IK_Mat_Tilsynsrapport_2026.pdf',
+    'ballast-water': 'Vannforbrukslogg_2026.pdf',
+    'eu-ets': 'Energiregnskap_2025.pdf',
+    'cii-rating': 'Enok_Tiltaksliste_2026.pdf',
+    'iopp': 'Energikartlegging_Rapport_2026.pdf',
+    'lsa': 'Kontrollrapport_Slokkeutstyr_2026.pdf',
+    'afs': 'Kartlegging_Uteomrade_2026.pdf',
+    'solas-v': 'Arsplan_2025_2026.pdf',
+    'mlc': 'Renholdsplan_2026.pdf',
+    'mlc-title-4': 'Smittevernrutine_Barnehage_2026.pdf',
   };
-  return map[certId] || 'compliance_document_2026.pdf';
+  return map[certId] || 'HMS_Rutine_Barnehage_2026.pdf';
 }
