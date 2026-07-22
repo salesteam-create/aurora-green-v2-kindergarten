@@ -62,7 +62,7 @@ window.renderAllAssets = function (root) {
 
   root.innerHTML = `
     <div class="mb-6">
-      <h1 class="text-2xl font-semibold text-slate-100">Aurora Vault · Asset Index</h1>
+      <h1 class="text-2xl font-semibold text-slate-100">Aurora Vault · Kindergarten Index</h1>
       <p class="text-sm text-slate-400 mt-1">Select a Private Vault to enter.</p>
     </div>
     <div class="grid grid-cols-3 gap-5">

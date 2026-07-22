@@ -9,7 +9,7 @@
   });
 
   window.INITIAL_STATE = {
-    currentPersona: 'owner',
+    currentPersona: 'compliance',
     currentView: 'dashboard',
     selectedVesselId: 'delhi-star',
     selectedComponentId: 'engine-room',

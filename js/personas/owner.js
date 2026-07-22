@@ -20,7 +20,7 @@ window.OwnerViews.dashboard = function (root) {
       <div>
         <div class="text-sm text-slate-400">Good morning, Captain Rao</div>
         <h1 class="text-3xl font-semibold tracking-tight">${v.name} — Compliance Overview</h1>
-        <div class="text-slate-400 text-sm mt-1">${v.type} · IMO ${v.imo} · ${v.flag} → ${v.targetMarket}</div>
+        <div class="text-slate-400 text-sm mt-1">${v.type} · Org.nr ${v.imo} · ${v.flag} → ${v.targetMarket}</div>
       </div>
       <div class="flex gap-2">
         ${Object.values(window.demoState.vessels).map(x => `

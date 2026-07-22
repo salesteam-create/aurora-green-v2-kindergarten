@@ -22,14 +22,14 @@ window.ComplianceViews['my-components'] = function (root) {
     <div class="flex items-end justify-between mb-6">
       <div>
         <h1 class="text-3xl font-semibold tracking-tight">My Assigned Components</h1>
-        <div class="text-slate-400 text-sm mt-1">${entity().name} · ${items.length} components across ${new Set(items.map(i=>i.vessel.id)).size} vessels.</div>
+        <div class="text-slate-400 text-sm mt-1">${entity().name} · ${items.length} components across ${new Set(items.map(i=>i.vessel.id)).size} kindergartens.</div>
       </div>
     </div>
     <div class="grid grid-cols-2 gap-4">
       ${items.map(({vessel, component}) => `
         <div class="card p-5 card-hover cursor-pointer" data-vid="${vessel.id}" data-cid="${component.id}">
           <div class="flex items-center justify-between mb-2">
-            <div class="text-xs text-slate-400">${vessel.name} · IMO ${vessel.imo}</div>
+            <div class="text-xs text-slate-400">${vessel.name} · Org.nr ${vessel.imo}</div>
             ${window.statusPill(component.status)}
           </div>
           <div class="text-lg font-medium">${component.name}</div>
@@ -75,11 +75,11 @@ window.ComplianceViews['cert-engine'] = function (root) {
   root.innerHTML = `
     <div class="flex items-end justify-between mb-6">
       <div>
-        <div class="text-xs text-slate-400">${v.name} · IMO ${v.imo}</div>
+        <div class="text-xs text-slate-400">${v.name} · Org.nr ${v.imo}</div>
         <h1 class="text-3xl font-semibold tracking-tight">${c.name} — Certification Engine</h1>
         <div class="text-slate-400 text-sm mt-1">${c.certifications.length} regulations tracked · ${c.score}% complete</div>
       </div>
-      ${showSubmit ? `<button id="submit-all" ${anyReady ? '' : 'disabled'} class="px-4 py-2 rounded-lg font-semibold ${anyReady ? 'bg-teal-400 text-slate-900 hover:bg-teal-300' : 'bg-slate-700 text-slate-500 cursor-not-allowed'} ${anyReady && window.demoState._submitJustUnlocked ? 'submit-pulse' : ''}">Submit to DNV</button>` : ''}
+      ${showSubmit ? `<button id="submit-all" ${anyReady ? '' : 'disabled'} class="px-4 py-2 rounded-lg font-semibold ${anyReady ? 'bg-teal-400 text-slate-900 hover:bg-teal-300' : 'bg-slate-700 text-slate-500 cursor-not-allowed'} ${anyReady && window.demoState._submitJustUnlocked ? 'submit-pulse' : ''}">Submit to Miljødirektoratet</button>` : ''}
     </div>
 
     <div class="grid grid-cols-12 gap-5">
@@ -128,7 +128,7 @@ window.ComplianceViews['cert-engine'] = function (root) {
           cr.status = 'pending-review';
           cr.aiFindings = findings;
           state.recentActivity.unshift({ at: new Date().toISOString(), persona: 'compliance', session: true,
-            text: `AI pre-validated ${cr.name}. Ready for DNV submission.` });
+            text: `AI pre-validated ${cr.name}. Ready for Miljødirektoratet submission.` });
         });
         window.toast(`${cert.name} · pre-validated`);
       }
@@ -161,10 +161,10 @@ window.ComplianceViews['cert-engine'] = function (root) {
       state.dnvQueue.unshift(...submissions);
       if (submissions.length) {
         state.recentActivity.unshift({ at: new Date().toISOString(), persona: 'compliance', session: true,
-          text: `Submitted ${submissions.length} item${submissions.length>1?'s':''} to DNV for review.` });
+          text: `Submitted ${submissions.length} item${submissions.length>1?'s':''} to Miljødirektoratet for review.` });
       }
     });
-    window.toast(`${submissions.length} submission${submissions.length>1?'s':''} sent to DNV`);
+    window.toast(`${submissions.length} submission${submissions.length>1?'s':''} sent to Miljødirektoratet`);
   });
 };
 
@@ -179,7 +179,7 @@ function reviewerFeedbackCard(feedback) {
   const isReject = feedback.decision === 'rejected';
   const pillClass = isReject ? 'pill-bad' : 'pill-warn';
   const label = feedback.decision.replace('-', ' ');
-  const notes = feedback.reviewerNotes || 'Reviewer requested changes — see DNV report.';
+  const notes = feedback.reviewerNotes || 'Reviewer requested changes — see Miljødirektoratet report.';
   return `
     <div class="rounded-lg p-4 border" style="border-color:${isReject ? 'rgba(251,113,133,.35)' : 'rgba(245,158,11,.35)'}; background:${isReject ? 'rgba(251,113,133,.06)' : 'rgba(245,158,11,.06)'};">
       <div class="flex items-center justify-between mb-2">
@@ -254,7 +254,7 @@ function certDetailHTML(cert) {
           </div>
         ` : ''}
         <div class="bg-sky-500/10 border border-sky-500/30 rounded-lg p-4">
-          <div class="flex items-center gap-2 text-sky-300 font-medium"><i data-lucide="clock" class="w-4 h-4"></i> Pre-validated · Awaiting DNV review</div>
+          <div class="flex items-center gap-2 text-sky-300 font-medium"><i data-lucide="clock" class="w-4 h-4"></i> Pre-validated · Awaiting Miljødirektoratet review</div>
           <div class="text-sm text-slate-300 mt-1">Uploaded: ${cert.uploadedDocs.join(', ')}</div>
         </div>
       ` : `
@@ -283,10 +283,10 @@ window.ComplianceViews.submissions = function (root) {
   root.innerHTML = `
     <div class="mb-6">
       <h1 class="text-3xl font-semibold tracking-tight">Submissions</h1>
-      <div class="text-slate-400 text-sm mt-1">Items sent for DNV review.</div>
+      <div class="text-slate-400 text-sm mt-1">Items sent for Miljødirektoratet review.</div>
     </div>
     <div class="card p-5 mb-5">
-      <div class="font-medium mb-3">Pending DNV review (${subs.length})</div>
+      <div class="font-medium mb-3">Pending Miljødirektoratet review (${subs.length})</div>
       ${subs.length === 0 ? '<div class="text-sm text-slate-500">No submissions pending.</div>' : subs.map(s => `
         <div class="flex items-center justify-between py-3 border-b border-slate-800 last:border-0">
           <div>

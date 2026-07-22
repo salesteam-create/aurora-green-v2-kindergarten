@@ -131,7 +131,7 @@ function decide(sub, decision) {
       ? `: ${reviewerNotes.length > 80 ? reviewerNotes.slice(0, 77) + '...' : reviewerNotes}`
       : '.';
     state.recentActivity.unshift({ at: new Date().toISOString(), persona: 'dnv', session: true,
-      text: `DNV ${verb} ${sub.certName}${noteSuffix}` });
+      text: `Miljødirektoratet ${verb} ${sub.certName}${noteSuffix}` });
   });
   window.toast(`${sub.certName} · ${decision.replace('-', ' ')}`);
 }

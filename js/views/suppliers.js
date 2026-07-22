@@ -51,12 +51,12 @@ window.renderSuppliers = function (root) {
   root.innerHTML = `
     <div class="mb-6">
       <h1 class="text-2xl font-semibold text-slate-100">Suppliers &amp; Investors · ${vault.name}</h1>
-      <p class="text-sm text-slate-400 mt-1">Each supplier in this vault contributes certifications and earns equity in the asset's value model.</p>
+      <p class="text-sm text-slate-400 mt-1">Each supplier in this vault contributes certifications and earns equity in the kindergarten's value model.</p>
     </div>
 
     <div class="grid grid-cols-4 gap-4 mb-6">
       ${statCard('Total Suppliers', suppliers.length, suppliers.filter(s => s.status === 'active').length + ' active')}
-      ${statCard('Share Equity Allocated', totalEquity.toFixed(1) + '%', 'of asset equity')}
+      ${statCard('Share Equity Allocated', totalEquity.toFixed(1) + '%', 'of kindergarten equity')}
       ${statCard('Green Shares Allocated', totalGreen.toFixed(1) + '%', 'of green-share pool')}
       ${statCard('Value Contribution', window.fmtEUR(totalValue), 'attributed to suppliers')}
     </div>
@@ -79,7 +79,7 @@ window.renderSuppliers = function (root) {
     </div>` : empty}
 
     <p class="mt-6 text-xs text-slate-500 italic">
-      Share allocations are illustrative for the prototype. Final allocations are computed by the Olidata equity algorithm based on certification weight, timing, and contribution.
+      Share allocations are illustrative for the demo. Final allocations are computed by the Olidata equity algorithm based on certification weight, timing, and contribution.
     </p>
   `;
 };
