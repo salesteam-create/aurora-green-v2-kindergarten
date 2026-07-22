@@ -73,19 +73,19 @@ window.wireUpload = function (container, { certId, onComplete }) {
 
 function fakeFilename(certId) {
   const map = {
-    'ihm-part-i': 'Avfallsplan_Solstrale_2026.pdf',
-    'marpol-annex-vi': 'Menyplan_Klimavurdering_Var_2026.pdf',
-    'solas-xii': 'Vedlikeholdsplan_Bygg_2026.pdf',
-    'ism-code': 'IK_Mat_Tilsynsrapport_2026.pdf',
-    'ballast-water': 'Vannforbrukslogg_2026.pdf',
-    'eu-ets': 'Energiregnskap_2025.pdf',
-    'cii-rating': 'Enok_Tiltaksliste_2026.pdf',
-    'iopp': 'Energikartlegging_Rapport_2026.pdf',
-    'lsa': 'Kontrollrapport_Slokkeutstyr_2026.pdf',
-    'afs': 'Kartlegging_Uteomrade_2026.pdf',
-    'solas-v': 'Arsplan_2025_2026.pdf',
-    'mlc': 'Renholdsplan_2026.pdf',
-    'mlc-title-4': 'Smittevernrutine_Barnehage_2026.pdf',
+    'ihm-part-i': 'Waste_Management_Plan_Solstrale_2026.pdf',
+    'marpol-annex-vi': 'Menu_Plan_Climate_Assessment_Spring_2026.pdf',
+    'solas-xii': 'Building_Maintenance_Plan_2026.pdf',
+    'ism-code': 'IK_Mat_Inspection_Report_2026.pdf',
+    'ballast-water': 'Water_Consumption_Log_2026.pdf',
+    'eu-ets': 'Energy_Account_2025.pdf',
+    'cii-rating': 'Energy_Saving_Measures_List_2026.pdf',
+    'iopp': 'Energy_Audit_Report_2026.pdf',
+    'lsa': 'Extinguisher_Inspection_Report_2026.pdf',
+    'afs': 'Outdoor_Area_Survey_2026.pdf',
+    'solas-v': 'Annual_Plan_2025_2026.pdf',
+    'mlc': 'Cleaning_Plan_2026.pdf',
+    'mlc-title-4': 'Infection_Control_Routine_2026.pdf',
   };
-  return map[certId] || 'HMS_Rutine_Barnehage_2026.pdf';
+  return map[certId] || 'HSE_Routine_Kindergarten_2026.pdf';
 }
