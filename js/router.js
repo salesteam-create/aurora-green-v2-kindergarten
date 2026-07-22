@@ -184,6 +184,9 @@ window.toast = function (text) {
   const el = document.createElement('div');
   el.className = 'toast';
   el.textContent = text;
+  // Stack above any toasts already on screen so rapid actions don't overlap.
+  const existing = document.querySelectorAll('.toast').length;
+  el.style.bottom = (24 + existing * 52) + 'px';
   document.body.appendChild(el);
   setTimeout(() => { el.style.opacity = '0'; el.style.transform = 'translateY(8px)'; el.style.transition = 'all .3s'; }, 2600);
   setTimeout(() => el.remove(), 3000);

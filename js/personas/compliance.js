@@ -22,7 +22,7 @@ window.ComplianceViews['my-components'] = function (root) {
     <div class="flex items-end justify-between mb-6">
       <div>
         <h1 class="text-3xl font-semibold tracking-tight">My Assigned Components</h1>
-        <div class="text-slate-400 text-sm mt-1">${entity().name} · ${items.length} components across ${new Set(items.map(i=>i.vessel.id)).size} kindergartens.</div>
+        <div class="text-slate-400 text-sm mt-1">${entity().name} · ${items.length} component${items.length === 1 ? '' : 's'} across ${new Set(items.map(i=>i.vessel.id)).size} kindergarten${new Set(items.map(i=>i.vessel.id)).size === 1 ? '' : 's'}.</div>
       </div>
     </div>
     <div class="grid grid-cols-2 gap-4">
@@ -38,7 +38,7 @@ window.ComplianceViews['my-components'] = function (root) {
               <div class="h-2 rounded-full bg-slate-700 overflow-hidden">
                 <div class="h-full" style="width:${component.score}%;background:${component.score>=80?'#2dd4bf':component.score>=60?'#f59e0b':'#fb7185'}"></div>
               </div>
-              <div class="text-xs text-slate-400 mt-1">${component.score}% complete · ${component.certifications.length} regulations</div>
+              <div class="text-xs text-slate-400 mt-1">${component.score}% complete · ${component.certifications.length} criteria</div>
             </div>
             <i data-lucide="chevron-right" class="w-5 h-5 text-slate-500"></i>
           </div>
@@ -77,7 +77,7 @@ window.ComplianceViews['cert-engine'] = function (root) {
       <div>
         <div class="text-xs text-slate-400">${v.name} · Org.nr ${v.imo}</div>
         <h1 class="text-3xl font-semibold tracking-tight">${c.name} — Certification Engine</h1>
-        <div class="text-slate-400 text-sm mt-1">${c.certifications.length} regulations tracked · ${c.score}% complete</div>
+        <div class="text-slate-400 text-sm mt-1">${c.certifications.length} criteria tracked · ${c.score}% complete</div>
       </div>
       ${showSubmit ? `<button id="submit-all" ${anyReady ? '' : 'disabled'} class="px-4 py-2 rounded-lg font-semibold ${anyReady ? 'bg-teal-400 text-slate-900 hover:bg-teal-300' : 'bg-slate-700 text-slate-500 cursor-not-allowed'} ${anyReady && window.demoState._submitJustUnlocked ? 'submit-pulse' : ''}">Submit to Miljødirektoratet</button>` : ''}
     </div>
@@ -102,7 +102,7 @@ window.ComplianceViews['cert-engine'] = function (root) {
         `).join('')}
       </div>
       <div class="col-span-7" id="cert-detail">
-        ${selId ? certDetailHTML(c.certifications.find(x => x.id === selId)) : '<div class="card p-8 text-slate-400">Select a regulation to view gap analysis and upload documents.</div>'}
+        ${selId ? certDetailHTML(c.certifications.find(x => x.id === selId)) : '<div class="card p-8 text-slate-400">Select a criterion to view gap analysis and upload documents.</div>'}
       </div>
     </div>
   `;

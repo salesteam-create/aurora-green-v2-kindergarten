@@ -26,7 +26,7 @@ window.renderAllAssets = function (root) {
     const stats = (!isPlaceholder && primary) ? `
       <div class="mt-4 pt-4 border-t border-slate-700/60 grid grid-cols-2 gap-3 text-xs">
         <div>
-          <div class="text-slate-500 uppercase tracking-wide">EU Readiness</div>
+          <div class="text-slate-500 uppercase tracking-wide">Grønt Flagg Readiness</div>
           <div class="text-slate-100 text-lg font-semibold mt-0.5">${primary.euReadinessScore}<span class="text-slate-400 text-sm">/100</span></div>
         </div>
         <div>
