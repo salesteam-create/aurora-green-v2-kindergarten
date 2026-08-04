@@ -571,6 +571,87 @@ window.AGG_CONTENT = {
 
     'default': 'Documentation complete and pre-validated against the applicable standard. Recommend approval.',
   },
+
+  // ----- Regulatory AI Agent feed -----
+  // Canned regulatory-change notifications. ILLUSTRATIVE ONLY: these are written
+  // to be plausible for a 2026 demo and are NOT verified against the actual
+  // legislative record. Replace wholesale when a real feed exists.
+  // severity: 'high' needs action now | 'medium' plan for it | 'info' awareness
+  // appliesTo: 'all' or a list of entity ids.
+  regulatoryAlerts: [
+    {
+      id: 'nis2-incident-thresholds',
+      date: '2026-04-14',
+      severity: 'high',
+      standard: 'NIS2',
+      title: 'Incident-reporting thresholds tightened for essential entities',
+      body: 'Significant-incident thresholds have been narrowed for the health sector, and the 24-hour early warning now applies to service degradation as well as outright unavailability. Entities without a documented out-of-hours escalation route are exposed.',
+      domains: ['Incident Response & Reporting'],
+      appliesTo: ['osp-san-rocco', 'comune-bergamo'],
+      actionBy: '2026-06-30',
+    },
+    {
+      id: 'gdpr-children-data',
+      date: '2026-04-02',
+      severity: 'high',
+      standard: 'GDPR',
+      title: 'Supervisory guidance on children\'s data in education settings',
+      body: 'New guidance sets out that photograph consent must be separately withdrawable and that retention of attendance and health records requires an explicit period per purpose. Blanket enrolment consent is no longer considered sufficient.',
+      domains: ['Data Protection & Privacy'],
+      appliesTo: ['delhi-star', 'marina-luna'],
+      actionBy: '2026-07-15',
+    },
+    {
+      id: 'gdpr-health-access-logging',
+      date: '2026-03-21',
+      severity: 'medium',
+      standard: 'GDPR',
+      title: 'Access logging expected for special-category health records',
+      body: 'Art. 9 processing of patient records is expected to carry per-user access logging sufficient to reconstruct who viewed a record and when. Shared clinical logins will not satisfy this.',
+      domains: ['Data Protection & Privacy', 'Access Control & Identity'],
+      appliesTo: ['osp-san-rocco'],
+      actionBy: '2026-09-01',
+    },
+    {
+      id: 'esrs-scope-revision',
+      date: '2026-03-05',
+      severity: 'medium',
+      standard: 'ESG',
+      title: 'ESRS reporting scope revised for smaller reporting entities',
+      body: 'Resource-use disclosure has been simplified for smaller entities, but the resource-outflow figures that remain must be reconcilable to primary measurement records. Contractor-supplied totals alone will not be accepted.',
+      domains: ['Environmental & Social (ESG)'],
+      appliesTo: 'all',
+      actionBy: '2026-10-31',
+    },
+    {
+      id: 'iso27001-annexa-clarification',
+      date: '2026-02-19',
+      severity: 'info',
+      standard: 'ISO 27001',
+      title: 'Annex A guidance clarifies evidence for supplier controls',
+      body: 'Clarified guidance on A.5.19–A.5.22 confirms that sub-processor authorisation must be evidenced in writing, not inferred from a framework agreement. Expect this to be sampled at the next surveillance audit.',
+      domains: ['Supplier & Third-Party Risk'],
+      appliesTo: 'all',
+      actionBy: null,
+    },
+    {
+      id: 'agid-minimum-measures',
+      date: '2026-01-28',
+      severity: 'info',
+      standard: 'NIS2',
+      title: 'Updated minimum security measures for public administration',
+      body: 'The baseline measure set for public bodies now references multi-factor authentication for all administrative access and an annual restore test with a recorded recovery time. Both are already covered by your current controls.',
+      domains: ['Access Control & Identity', 'Business Continuity & Resilience'],
+      appliesTo: ['comune-bergamo'],
+      actionBy: null,
+    },
+  ],
+};
+
+// Alerts the Regulatory AI Agent should raise for a given entity.
+window.AGG_CONTENT.alertsFor = function (vesselId) {
+  return window.AGG_CONTENT.regulatoryAlerts.filter(a =>
+    a.appliesTo === 'all' || (Array.isArray(a.appliesTo) && a.appliesTo.includes(vesselId)));
 };
 
 // Content lookup. Tries the exact criterion id first, then the entity-agnostic
