@@ -145,7 +145,7 @@ window.renderDigitalTwin = function (vessel, onZoneClick, selectedZoneId) {
   // Vessel identification (top-right).
   const vesselTag = `
     <g pointer-events="none" font-family="Inter,system-ui,sans-serif">
-      <text x="940" y="22" text-anchor="end" fill="#cbd5e1" font-size="13" font-weight="600">${vessel.name} · Org.nr ${vessel.imo}</text>
+      <text x="940" y="22" text-anchor="end" fill="#cbd5e1" font-size="13" font-weight="600">${vessel.name} · Reg. no ${vessel.imo}</text>
       <text x="940" y="36" text-anchor="end" fill="#64748b" font-size="10">${vessel.type} · ${vessel.flag} → ${vessel.targetMarket}</text>
     </g>
   `;

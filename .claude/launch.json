@@ -4,8 +4,8 @@
     {
       "name": "agg-demo",
       "runtimeExecutable": "python",
-      "runtimeArgs": ["-m", "http.server", "8768"],
-      "port": 8768
+      "runtimeArgs": [".claude/devserver.py", "8770"],
+      "port": 8770
     }
   ]
 }

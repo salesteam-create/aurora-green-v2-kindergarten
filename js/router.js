@@ -33,10 +33,10 @@ window.DEFAULT_VIEW = {
 window.PERSONA_LEVEL = { owner: 'vault', compliance: 'vault', dnv: 'sv', scientific: 'sv' };
 
 window.PERSONA_LABELS = {
-  owner: 'Captain Rao — Delhi Star Owner', // hidden in kindergarten demo
-  compliance: 'Barnehage · Compliance',
-  dnv: 'Miljødirektoratet · Overview',
-  scientific: 'Scientific Committee · Aurora Vault', // hidden in kindergarten demo
+  owner: 'Captain Rao — Delhi Star Owner', // hidden in this demo
+  compliance: 'Entity · Compliance Dashboard',
+  dnv: 'Authority · PA Due Diligence Overview',
+  scientific: 'Scientific Committee · Aurora Vault', // hidden in this demo
 };
 
 window.renderSidebar = function () {
@@ -53,7 +53,7 @@ window.renderSidebar = function () {
     html = `
       <div class="nav-item active">
         <i data-lucide="grid-3x3" class="w-4 h-4"></i>
-        <span>All Kindergartens</span>
+        <span>All Entities</span>
       </div>`;
     nav.innerHTML = html;
   } else {
@@ -61,7 +61,7 @@ window.renderSidebar = function () {
       html += `
         <div class="nav-item" data-back-to-shell="1">
           <i data-lucide="arrow-left" class="w-4 h-4"></i>
-          <span>All Kindergartens</span>
+          <span>All Entities</span>
         </div>
         <div class="my-2 border-t border-slate-800"></div>`;
     }
@@ -104,7 +104,7 @@ window.renderSidebar = function () {
 
   const footer = document.getElementById('sidebar-footer');
   if (stage === 'sv-shell' && level === 'vault') {
-    footer.innerHTML = `<div class="text-slate-400 mb-1">Aurora Vault</div><div class="text-slate-300">Kindergarten Index</div>`;
+    footer.innerHTML = `<div class="text-slate-400 mb-1">Aurora Vault</div><div class="text-slate-300">Entity Index</div>`;
     lucide.createIcons();
     return;
   }
@@ -118,9 +118,9 @@ window.renderSidebar = function () {
   }
   if (persona === 'compliance') {
     const ent = window.demoState.compliantEntities[window.demoState.currentComplianceEntity];
-    footer.innerHTML = `<div class="text-slate-400 mb-1">Signed in as</div><div class="text-slate-300">${ent ? ent.name : ''}</div><div>Grønt Flagg · Rogaland</div>`;
+    footer.innerHTML = `<div class="text-slate-400 mb-1">Signed in as</div><div class="text-slate-300">${ent ? ent.name : ''}</div><div>Continuous Compliance Management</div>`;
   } else if (persona === 'dnv') {
-    footer.innerHTML = `<div class="text-slate-400 mb-1">Reviewer</div><div class="text-slate-300">Miljødirektoratet · Rogaland</div>`;
+    footer.innerHTML = `<div class="text-slate-400 mb-1">Reviewer</div><div class="text-slate-300">Supervisory Authority</div><div>Italy &amp; Norway</div>`;
   } else if (persona === 'scientific') {
     footer.innerHTML = `<div class="text-slate-400 mb-1">Scientific Committee</div><div class="text-slate-300">Q1 2026 framework</div><div>ratified</div>`;
   } else {
