@@ -18,6 +18,10 @@
 
     vaultStage: 'locked',
     currentVaultId: null,
+
+    // Overview map filters (Authority persona). Reset restores these defaults.
+    overviewFilters: { region: 'all', entityType: 'all' },
+
     privateVaults: {
       'sultan-vault': {
         id: 'sultan-vault',
@@ -94,6 +98,9 @@
         type: 'Municipal kindergarten · 4 departments',
         flag: 'Stavanger',
         targetMarket: 'Multi-standard compliance',
+        country: 'Norway', region: 'Rogaland', city: 'Stavanger',
+        entityType: 'school',
+        map: { x: 39, y: 83 },
         yearBuilt: 2014,
         dwt: '82 children · 22 staff',
         nominalValue: 300_000_000,
@@ -223,6 +230,9 @@
         type: 'Private kindergarten · 3 departments',
         flag: 'Sandnes',
         targetMarket: 'Multi-standard compliance',
+        country: 'Norway', region: 'Rogaland', city: 'Sandnes',
+        entityType: 'school',
+        map: { x: 43, y: 90 },
         yearBuilt: 2019,
         dwt: '58 children · 15 staff',
         nominalValue: 180_000_000,
@@ -336,6 +346,9 @@
         type: 'Regional hospital · 6 departments',
         flag: 'Lombardia',
         targetMarket: 'Multi-standard compliance',
+        country: 'Italy', region: 'Lombardia', city: 'Bergamo',
+        entityType: 'hospital',
+        map: { x: 47, y: 20 },
         yearBuilt: 1979,
         dwt: '410 beds · 1,240 staff',
         nominalValue: 460_000_000,
@@ -461,6 +474,9 @@
         type: 'Municipal body · 11 services',
         flag: 'Lombardia',
         targetMarket: 'Multi-standard compliance',
+        country: 'Italy', region: 'Lombardia', city: 'Bergamo',
+        entityType: 'municipal',
+        map: { x: 42, y: 25 },
         yearBuilt: 1928,
         dwt: '121,000 residents · 840 staff',
         nominalValue: 240_000_000,

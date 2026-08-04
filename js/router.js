@@ -13,6 +13,7 @@ window.NAV = {
     { view: 'suppliers',     label: 'Suppliers & Coverage', icon: 'users' },
   ],
   dnv: [
+    { view: 'overview',      label: 'Overview Map',    icon: 'map' },
     { view: 'review-queue',  label: 'Review Queue',    icon: 'inbox' },
     { view: 'completed',     label: 'Completed',       icon: 'check-circle-2' },
   ],
@@ -26,7 +27,7 @@ window.NAV = {
 window.DEFAULT_VIEW = {
   owner: 'dashboard',
   compliance: 'my-components',
-  dnv: 'review-queue',
+  dnv: 'overview',
   scientific: 'framework',
 };
 
