@@ -5,8 +5,8 @@ window.wireUpload = function (container, { certId, onComplete }) {
   if (!dz) return;
 
   const simulate = (filename) => {
-    const phases = (window.AGG_CONTENT.aiPhases[certId] || window.AGG_CONTENT.aiPhases.default);
-    const findings = (window.AGG_CONTENT.aiFindings[certId] || window.AGG_CONTENT.aiFindings.default);
+    const phases = window.AGG_CONTENT.pick(window.AGG_CONTENT.aiPhases, certId);
+    const findings = window.AGG_CONTENT.pick(window.AGG_CONTENT.aiFindings, certId);
     dz.classList.add('hidden');
 
     // Disable submit button while AI runs.
@@ -101,6 +101,34 @@ function fakeFilename(certId) {
     'rb-iso27001-a5-29-continuity': 'Business_Continuity_Plan_Regnbuen_2026.pdf',
     'rb-iso27001-a7-physical': 'Physical_Security_Assessment_Regnbuen_2026.pdf',
     'rb-esg-e5-waste': 'Waste_Resource_Report_Regnbuen_2025.pdf',
+
+    // ----- Ospedale San Rocco -----
+    'hos-iso27001-a5-policy': 'Politica_Sicurezza_Informazioni_SanRocco_2026.pdf',
+    'hos-iso27001-cl9-review': 'Programma_Audit_Interno_2026.pdf',
+    'hos-nis2-art21-riskmgmt': 'Analisi_Rischi_NIS2_SanRocco_2026.pdf',
+    'hos-gdpr-art9-health': 'Valutazione_Garanzie_Art9_Dati_Sanitari_2026.pdf',
+    'hos-gdpr-art30-ropa': 'Registro_Trattamenti_SanRocco_2026.xlsx',
+    'hos-gdpr-art32-security': 'Registro_Misure_Tecniche_2026.pdf',
+    'hos-iso27001-a8-access': 'Matrice_Accessi_Sistemi_Clinici_2026.xlsx',
+    'hos-iso27001-a8-05-mfa': 'Piano_Rollout_MFA_SanRocco_2026.pdf',
+    'hos-nis2-art23-incident': 'Piano_Risposta_Incidenti_2026.pdf',
+    'hos-nis2-art21-supplychain': 'Registro_Fornitori_ICT_2026.xlsx',
+    'hos-iso27001-a5-29-continuity': 'Piano_Continuita_Operativa_2026.pdf',
+    'hos-iso27001-a7-physical': 'Valutazione_Sicurezza_Fisica_2026.pdf',
+    'hos-esg-e5-waste': 'Report_Rifiuti_Sanitari_2026.pdf',
+
+    // ----- Comune di Bergamo -----
+    'mun-iso27001-a5-policy': 'Politica_Sicurezza_Informazioni_Bergamo_2026.pdf',
+    'mun-nis2-art21-riskmgmt': 'Analisi_Rischi_NIS2_Bergamo_2026.pdf',
+    'mun-gdpr-art30-ropa': 'Registro_Trattamenti_Bergamo_2026.xlsx',
+    'mun-gdpr-art37-dpo': 'Atto_Nomina_DPO_Bergamo_2026.pdf',
+    'mun-iso27001-a8-access': 'Matrice_Accessi_Servizi_Digitali_2026.xlsx',
+    'mun-nis2-art23-incident': 'Piano_Risposta_Incidenti_Bergamo_2026.pdf',
+    'mun-iso27001-a5-19-supplier': 'Accordi_Responsabile_Trattamento_2026.zip',
+    'mun-nis2-art21-supplychain': 'Template_Approvvigionamento_ICT_2026.pdf',
+    'mun-iso27001-a5-29-continuity': 'Test_Ripristino_Marzo_2026.pdf',
+    'mun-iso27001-a7-physical': 'Verifica_Log_Accessi_Sedi_2026.pdf',
+    'mun-esg-e1-energy': 'Report_Energia_Emissioni_Bergamo_2025.pdf',
   };
   return map[certId] || 'Compliance_Evidence_2026.pdf';
 }

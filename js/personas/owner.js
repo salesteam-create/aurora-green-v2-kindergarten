@@ -119,7 +119,7 @@ window.OwnerViews.dashboard = function (root) {
     </div>
     <div id="comp-modal-root"></div>
   `;
-  window.renderTrendChart('trendChart', window.demoState.scoreHistory, v.euReadinessScore);
+  window.renderTrendChart('trendChart', v.scoreHistory || [], v.euReadinessScore);
 
   root.querySelectorAll('.vessel-btn').forEach(btn => btn.addEventListener('click', () => {
     window.demoState.selectedVesselId = btn.dataset.vid;

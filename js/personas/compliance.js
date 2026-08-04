@@ -153,7 +153,7 @@ window.ComplianceViews['cert-engine'] = function (root) {
             submittedAt: new Date().toISOString(),
             session: true,
             docs: cr.uploadedDocs.slice(),
-            aiNotes: window.AGG_CONTENT.reviewerNotes[cr.id] || window.AGG_CONTENT.reviewerNotes.default,
+            aiNotes: window.AGG_CONTENT.pick(window.AGG_CONTENT.reviewerNotes, cr.id),
             status: 'pending',
           });
         }

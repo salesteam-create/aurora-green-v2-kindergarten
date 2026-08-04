@@ -96,7 +96,7 @@ window.renderValueChart = function (canvasId, vessel) {
   // Synth value history based on score history.
   const floor = vessel.nominalValue * 0.80;
   const ceiling = vessel.projectedValue;
-  const history = window.demoState.scoreHistory.map(h => ({
+  const history = (vessel.scoreHistory || []).map(h => ({
     date: h.date,
     value: Math.round(floor + (ceiling - floor) * (h.score / 100)),
   }));
