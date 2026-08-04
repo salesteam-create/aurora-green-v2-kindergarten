@@ -1,5 +1,12 @@
 # Aurora Green Genesis — Interactive Prototype Brief
 
+> **SUPERSEDED — retained as history.** This document describes the original yacht /
+> maritime build (three personas, digital twin, €285M hero flow). The authoritative
+> source of truth is now **`HANDOFF.md`**: one platform, two modules (PA Due Diligence
+> Overview + Compliance Dashboard), generic standards, no € machinery. Where the two
+> disagree, `HANDOFF.md` wins. Sections 2 (tech stack), 7 (content guidelines) and 9
+> (out of scope) below are still broadly valid; sections 3–6 and 10 are not.
+
 <!--
 POST-MEETING (kindergarten pilot — parked during the re-skin rehearsal pass, do not build before founder triage):
 
