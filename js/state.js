@@ -744,6 +744,38 @@
 
   window.demoState = structuredClone(window.INITIAL_STATE);
 
+  // The demo's fixed "today". All date-derived display hangs off this so the
+  // canned data stays coherent whenever the demo is actually run.
+  const DEMO_TODAY = '2026-04-29';
+  window.AGG_TODAY = () => new Date(DEMO_TODAY);
+
+  // Remediation window by criticality, in days, for criteria not yet met.
+  // Compliance work is bounded by a due date, not by a cost estimate.
+  const REMEDIATION_DAYS = { critical: 60, high: 120, medium: 180 };
+
+  // A criterion always has a date attached to it: a remediation deadline while
+  // it is open, or a renewal date once it is met (which is the decay expiry).
+  window.criterionDeadline = function (cert) {
+    const today = window.AGG_TODAY();
+    const met = cert.status === 'compliant' || cert.status === 'approved';
+    let due;
+    if (met && cert.lastValidatedAt && cert.decayWindowMonths) {
+      due = new Date(cert.lastValidatedAt);
+      due.setMonth(due.getMonth() + cert.decayWindowMonths);
+    } else {
+      due = new Date(today);
+      due.setDate(due.getDate() + (REMEDIATION_DAYS[cert.criticality] ?? 180));
+    }
+    const days = Math.round((due - today) / 86400000);
+    return {
+      kind: met ? 'renewal' : 'remediation',
+      iso: due.toISOString().slice(0, 10),
+      label: due.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }),
+      daysLeft: days,
+      overdue: days < 0,
+    };
+  };
+
   // ----- Computation helpers -----
   const CERT_WEIGHTS = { missing: 0, partial: 50, 'pending-review': 75, compliant: 100, approved: 100 };
 
@@ -825,7 +857,7 @@
   window.computeDecayProjection = function (vesselId, monthsAhead) {
     const live = window.demoState.vessels[vesselId];
     if (!live) return null;
-    const today = new Date('2026-04-29');
+    const today = window.AGG_TODAY();
     const horizon = new Date(today);
     horizon.setMonth(horizon.getMonth() + monthsAhead);
 

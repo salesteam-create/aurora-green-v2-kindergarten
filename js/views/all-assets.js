@@ -1,7 +1,6 @@
 window.renderAllAssets = function (root) {
   const persona = window.demoState.currentPersona;
   const vaults = Object.values(window.demoState.privateVaults);
-  const fmtMoney = (n) => '€' + (n / 1_000_000).toFixed(0) + 'M';
 
   const entityKey = window.demoState.currentComplianceEntity;
   const entityComponents = (window.demoState.compliantEntities[entityKey] || {}).components || [];
@@ -26,12 +25,12 @@ window.renderAllAssets = function (root) {
     const stats = (!isPlaceholder && primary) ? `
       <div class="mt-4 pt-4 border-t border-slate-700/60 grid grid-cols-2 gap-3 text-xs">
         <div>
-          <div class="text-slate-500 uppercase tracking-wide">Grønt Flagg Readiness</div>
-          <div class="text-slate-100 text-lg font-semibold mt-0.5">${primary.euReadinessScore}<span class="text-slate-400 text-sm">/100</span></div>
+          <div class="text-slate-500 uppercase tracking-wide">Compliance</div>
+          <div class="text-slate-100 text-lg font-semibold mt-0.5">${primary.euReadinessScore}<span class="text-slate-400 text-sm">%</span></div>
         </div>
         <div>
-          <div class="text-slate-500 uppercase tracking-wide">Current Value</div>
-          <div class="text-slate-100 text-lg font-semibold mt-0.5">${fmtMoney(primary.currentValue)}</div>
+          <div class="text-slate-500 uppercase tracking-wide">Critical Gaps</div>
+          <div class="text-lg font-semibold mt-0.5 ${primary.criticalGaps > 0 ? 'text-rose-300' : 'text-teal-300'}">${primary.criticalGaps}</div>
         </div>
       </div>
     ` : (isPlaceholder ? `

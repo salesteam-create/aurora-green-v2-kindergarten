@@ -67,7 +67,14 @@ window.ComplianceViews['cert-engine'] = function (root) {
     return window.ComplianceViews['cert-engine'](root);
   }
 
-  const selId = window.demoState.selectedCertId;
+  // A selected criterion can outlive the component it belonged to: switching
+  // vault leaves selectedCertId set, and the sidebar can then re-enter this view
+  // with a criterion id from a different entity. Resolve it against the current
+  // component and drop it if it no longer belongs here.
+  const selected = c.certifications.find(x => x.id === window.demoState.selectedCertId) || null;
+  if (!selected) window.demoState.selectedCertId = null;
+  const selId = selected ? selected.id : null;
+
   const anyReady = c.certifications.some(x => x.status === 'pending-review');
   const allDone = c.certifications.every(x => x.status === 'compliant' || x.status === 'approved');
   const showSubmit = !allDone;
@@ -91,18 +98,20 @@ window.ComplianceViews['cert-engine'] = function (root) {
               ${window.statusPill(cert.status)}
             </div>
             <div class="mt-1 text-xs text-slate-500">${cert.regulation}</div>
-            ${cert.status === 'missing' || cert.status === 'partial' ? `
-              <div class="mt-2 flex items-center gap-3 text-xs text-slate-400">
-                <span>€${cert.costMin.toLocaleString()}–${cert.costMax.toLocaleString()}</span>
-                <span>·</span>
-                <span>${cert.timelineWeeks[0]}–${cert.timelineWeeks[1]} weeks</span>
-              </div>
-            ` : ''}
+            ${cert.status === 'missing' || cert.status === 'partial' ? (() => {
+              const d = window.criterionDeadline(cert);
+              return `
+              <div class="mt-2 flex items-center gap-3 text-xs">
+                <span class="${d.overdue ? 'text-rose-300' : d.daysLeft <= 60 ? 'text-amber-300' : 'text-slate-400'}">Due ${d.label}</span>
+                <span class="text-slate-500">·</span>
+                <span class="text-slate-400">${d.overdue ? Math.abs(d.daysLeft) + ' days overdue' : d.daysLeft + ' days left'}</span>
+              </div>`;
+            })() : ''}
           </div>
         `).join('')}
       </div>
       <div class="col-span-7" id="cert-detail">
-        ${selId ? certDetailHTML(c.certifications.find(x => x.id === selId)) : '<div class="card p-8 text-slate-400">Select a criterion to view gap analysis and upload documents.</div>'}
+        ${selected ? certDetailHTML(selected) : '<div class="card p-8 text-slate-400">Select a criterion to view gap analysis and upload documents.</div>'}
       </div>
     </div>
   `;
@@ -115,8 +124,8 @@ window.ComplianceViews['cert-engine'] = function (root) {
     window.render();
   }));
 
-  if (selId) {
-    const cert = c.certifications.find(x => x.id === selId);
+  if (selected) {
+    const cert = selected;
     window.wireUpload(document.getElementById('cert-detail'), {
       certId: cert.id,
       onComplete: (filename, findings) => {
@@ -207,13 +216,37 @@ function certDetailHTML(cert) {
         <div class="text-xs text-slate-400 mt-1">${cert.regulation} · criticality: ${cert.criticality}</div>
       </div>
 
-      ${cert.status !== 'compliant' && cert.status !== 'approved' ? `
+      ${cert.status !== 'compliant' && cert.status !== 'approved' ? (() => {
+        const d = window.criterionDeadline(cert);
+        return `
         <div class="grid grid-cols-3 gap-3 text-sm">
-          <div class="bg-slate-900/50 rounded-lg p-3"><div class="text-xs text-slate-400">Est. cost</div><div class="font-medium">€${cert.costMin.toLocaleString()} – ${cert.costMax.toLocaleString()}</div></div>
-          <div class="bg-slate-900/50 rounded-lg p-3"><div class="text-xs text-slate-400">Timeline</div><div class="font-medium">${cert.timelineWeeks[0]}–${cert.timelineWeeks[1]} weeks</div></div>
-          <div class="bg-slate-900/50 rounded-lg p-3"><div class="text-xs text-slate-400">Criticality</div><div class="font-medium capitalize">${cert.criticality}</div></div>
+          <div class="bg-slate-900/50 rounded-lg p-3">
+            <div class="text-xs text-slate-400">Deadline</div>
+            <div class="font-medium ${d.overdue ? 'text-rose-300' : d.daysLeft <= 60 ? 'text-amber-300' : ''}">${d.label}</div>
+            <div class="text-xs text-slate-500 mt-0.5">${d.overdue ? Math.abs(d.daysLeft) + ' days overdue' : d.daysLeft + ' days left'}</div>
+          </div>
+          <div class="bg-slate-900/50 rounded-lg p-3">
+            <div class="text-xs text-slate-400">Est. effort</div>
+            <div class="font-medium">${cert.timelineWeeks[0]}–${cert.timelineWeeks[1]} weeks</div>
+          </div>
+          <div class="bg-slate-900/50 rounded-lg p-3">
+            <div class="text-xs text-slate-400">Criticality</div>
+            <div class="font-medium capitalize">${cert.criticality}</div>
+          </div>
+        </div>`;
+      })() : `
+        <div class="grid grid-cols-2 gap-3 text-sm">
+          <div class="bg-slate-900/50 rounded-lg p-3">
+            <div class="text-xs text-slate-400">Renewal due</div>
+            <div class="font-medium">${window.criterionDeadline(cert).label}</div>
+            <div class="text-xs text-slate-500 mt-0.5">${window.criterionDeadline(cert).daysLeft} days left</div>
+          </div>
+          <div class="bg-slate-900/50 rounded-lg p-3">
+            <div class="text-xs text-slate-400">Criticality</div>
+            <div class="font-medium capitalize">${cert.criticality}</div>
+          </div>
         </div>
-      ` : ''}
+      `}
 
       <div>
         <div class="text-sm text-slate-400 mb-1">Gap analysis</div>

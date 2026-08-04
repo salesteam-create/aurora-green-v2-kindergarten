@@ -3,14 +3,14 @@ window.NAV = {
     { view: 'dashboard',     label: 'Dashboard',       icon: 'layout-dashboard' },
     { view: 'digital-twin',  label: 'Digital Twin',    icon: 'ship' },
     { view: 'asset-value',   label: 'Asset Value',     icon: 'trending-up' },
-    { view: 'suppliers',     label: 'Suppliers & Investors', icon: 'users' },
+    { view: 'suppliers',     label: 'Suppliers & Coverage', icon: 'users' },
     { view: 'reports',       label: 'Reports',         icon: 'file-text' },
   ],
   compliance: [
     { view: 'my-components', label: 'My Components',   icon: 'list-checks' },
     { view: 'cert-engine',   label: 'Certification Engine', icon: 'shield-check' },
     { view: 'submissions',   label: 'Submissions',     icon: 'send' },
-    { view: 'suppliers',     label: 'Suppliers & Investors', icon: 'users' },
+    { view: 'suppliers',     label: 'Suppliers & Coverage', icon: 'users' },
   ],
   dnv: [
     { view: 'review-queue',  label: 'Review Queue',    icon: 'inbox' },
