@@ -424,6 +424,14 @@
   // ----- Computation helpers -----
   const CERT_WEIGHTS = { missing: 0, partial: 50, 'pending-review': 75, compliant: 100, approved: 100 };
 
+  // Mean of CERT_WEIGHTS across a criterion list. This is the raw formula.
+  function certAvg(certs) {
+    if (!certs || certs.length === 0) return 0;
+    return certs.reduce((s, c) => s + (CERT_WEIGHTS[c.status] ?? 0), 0) / certs.length;
+  }
+
+  const clampScore = (n) => Math.max(0, Math.min(100, Math.round(n)));
+
   function componentHasDiverged(component, vesselId) {
     const initComp = window.INITIAL_STATE.vessels[vesselId]?.components?.[component.id];
     if (!initComp) return true;
@@ -434,15 +442,23 @@
     });
   }
 
+  // Seeded scores are the display baseline and sit on a different scale from the
+  // raw formula (Solstrale seeds 62 while certAvg over its areas yields ~77). So
+  // the formula supplies the *delta* from the seeded state rather than replacing
+  // it: score = seeded + (formula_now - formula_at_seed). This keeps the headline
+  // numbers the founder demos stable, makes every upload/approval move the score
+  // by a believable amount, and is the same approach computeDecayProjection uses.
   function recomputeComponent(component, vesselId) {
-    if (!component.certifications || component.certifications.length === 0) return false;
+    const init = window.INITIAL_STATE.vessels[vesselId]?.components?.[component.id];
+    if (!init || !component.certifications || component.certifications.length === 0) return false;
     // Leave seeded score/status untouched until this component's certs actually diverge from initial.
     if (!componentHasDiverged(component, vesselId)) return false;
-    const total = component.certifications.reduce((s, c) => s + (CERT_WEIGHTS[c.status] ?? 0), 0);
-    const avg = total / component.certifications.length;
-    component.score = Math.round(avg);
-    if (avg >= 95) component.status = 'compliant';
-    else if (avg >= 55) component.status = 'partial';
+
+    const delta = certAvg(component.certifications) - certAvg(init.certifications);
+    const score = clampScore(init.score + delta);
+    component.score = score;
+    if (score >= 95) component.status = 'compliant';
+    else if (score >= 55) component.status = 'partial';
     else component.status = 'missing';
     return true;
   }
@@ -450,12 +466,18 @@
   function recomputeVessel(vessel) {
     const comps = Object.values(vessel.components);
     if (comps.length === 0) return;
+    const init = window.INITIAL_STATE.vessels[vessel.id];
+    if (!init) return;
     let anyChanged = false;
     comps.forEach(c => { if (recomputeComponent(c, vessel.id)) anyChanged = true; });
     if (!anyChanged) return;
 
-    const avg = comps.reduce((s, c) => s + c.score, 0) / comps.length;
-    vessel.euReadinessScore = Math.round(avg);
+    // Same delta rule one level up: non-diverged areas still hold their seeded
+    // score, so the means differ only by the movement we actually caused.
+    const initComps = Object.values(init.components);
+    const seededMean = initComps.reduce((s, c) => s + c.score, 0) / initComps.length;
+    const liveMean = comps.reduce((s, c) => s + c.score, 0) / comps.length;
+    vessel.euReadinessScore = clampScore(init.euReadinessScore + (liveMean - seededMean));
 
     let criticalGaps = 0;
     comps.forEach(c => c.certifications.forEach(cert => {
@@ -486,11 +508,7 @@
 
     const avgFromCerts = (vessel) => {
       const comps = Object.values(vessel.components);
-      const compScore = (comp) => {
-        const t = comp.certifications.reduce((s, c) => s + (CERT_WEIGHTS[c.status] ?? 0), 0);
-        return t / comp.certifications.length;
-      };
-      return comps.reduce((s, c) => s + compScore(c), 0) / comps.length;
+      return comps.reduce((s, c) => s + certAvg(c.certifications), 0) / comps.length;
     };
 
     const baseline = avgFromCerts(live);
