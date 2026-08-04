@@ -73,19 +73,34 @@ window.wireUpload = function (container, { certId, onComplete }) {
 
 function fakeFilename(certId) {
   const map = {
-    'ihm-part-i': 'Waste_Management_Plan_Solstrale_2026.pdf',
-    'marpol-annex-vi': 'Menu_Plan_Climate_Assessment_Spring_2026.pdf',
-    'solas-xii': 'Building_Maintenance_Plan_2026.pdf',
-    'ism-code': 'IK_Mat_Inspection_Report_2026.pdf',
-    'ballast-water': 'Water_Consumption_Log_2026.pdf',
-    'eu-ets': 'Energy_Account_2025.pdf',
-    'cii-rating': 'Energy_Saving_Measures_List_2026.pdf',
-    'iopp': 'Energy_Audit_Report_2026.pdf',
-    'lsa': 'Extinguisher_Inspection_Report_2026.pdf',
-    'afs': 'Outdoor_Area_Survey_2026.pdf',
-    'solas-v': 'Annual_Plan_2025_2026.pdf',
-    'mlc': 'Cleaning_Plan_2026.pdf',
-    'mlc-title-4': 'Infection_Control_Routine_2026.pdf',
+    // ----- Solstråle Barnehage -----
+    'sol-iso27001-a5-policy': 'Information_Security_Policy_Solstrale_v2_2026.pdf',
+    'sol-iso27001-a5-roles': 'Roles_Responsibilities_Matrix_2026.pdf',
+    'sol-iso27001-cl9-review': 'Internal_Audit_Report_2026.pdf',
+    'sol-gdpr-art30-ropa': 'Records_of_Processing_Activities_2026.xlsx',
+    'sol-gdpr-art35-dpia': 'DPIA_Parent_App_Solstrale_2026.pdf',
+    'sol-gdpr-art13-transparency': 'Privacy_Notice_Guardians_2026.pdf',
+    'sol-iso27001-a8-access': 'Access_Control_Matrix_Q1_2026.xlsx',
+    'sol-iso27001-a8-05-mfa': 'MFA_Enrolment_Report_2026.pdf',
+    'sol-nis2-art23-incident': 'Incident_Response_Plan_2026.pdf',
+    'sol-iso27001-a5-19-supplier': 'Data_Processing_Agreements_2026.zip',
+    'sol-iso27001-a5-29-continuity': 'Backup_Restore_Test_Report_2026.pdf',
+    'sol-iso27001-a7-physical': 'Physical_Security_Assessment_2026.pdf',
+    'sol-iso27001-a7-10-media': 'Media_Disposal_Procedure_2026.pdf',
+    'sol-esg-e5-waste': 'Waste_Resource_Report_Solstrale_2026.pdf',
+
+    // ----- Regnbuen Barnehage -----
+    'rb-iso27001-cl9-review': 'Internal_Audit_Report_Regnbuen_2026.pdf',
+    'rb-iso27001-a5-policy': 'Information_Security_Policy_Regnbuen_2026.pdf',
+    'rb-gdpr-art30-ropa': 'Records_of_Processing_Activities_Regnbuen_2026.xlsx',
+    'rb-gdpr-art13-transparency': 'Consent_Register_Q1_2026.xlsx',
+    'rb-iso27001-a8-access': 'Access_Control_Matrix_Regnbuen_2026.xlsx',
+    'rb-iso27001-a8-05-mfa': 'MFA_Enrolment_Report_Regnbuen_2026.pdf',
+    'rb-nis2-art23-incident': 'Tabletop_Exercise_Report_Dec_2025.pdf',
+    'rb-iso27001-a5-19-supplier': 'Supplier_Register_Regnbuen_2026.pdf',
+    'rb-iso27001-a5-29-continuity': 'Business_Continuity_Plan_Regnbuen_2026.pdf',
+    'rb-iso27001-a7-physical': 'Physical_Security_Assessment_Regnbuen_2026.pdf',
+    'rb-esg-e5-waste': 'Waste_Resource_Report_Regnbuen_2025.pdf',
   };
-  return map[certId] || 'HSE_Routine_Kindergarten_2026.pdf';
+  return map[certId] || 'Compliance_Evidence_2026.pdf';
 }
