@@ -9,7 +9,8 @@ partners. One section per version, newest first.
 
 **Date:** April 2026
 **In one line:** the demo is no longer a kindergarten tool — it is the compliance
-platform, with kindergartens as just one of four example clients.
+platform, with both halves working: the authority's overview and the client's own
+dashboard, and kindergartens as just one of four example clients.
 
 ### What changed and why
 
@@ -55,24 +56,42 @@ platform, with kindergartens as just one of four example clients.
   document now moves the score by a few points at a time, exactly as you would
   describe it in a live walkthrough.
 
+- **New: the authority's map.** The regulator's view now opens on a map of Norway
+  and Italy with one dot per client, coloured by compliance level and ringed where
+  a critical gap is open. It can be filtered by region and by type of
+  organisation, and clicking a dot shows that client's weakest areas. Below it,
+  the platform states plainly which clients warrant a site visit and which only
+  need watching — two of the four in each case. This is the "inspect where it
+  matters, not at random" argument, made concrete.
+
+- **The demo opens straight into the platform.** The old maritime marketing page
+  that used to sit in front of it has been removed, so there is no longer a
+  wrong-product first impression to click past.
+
 ### How to view it
 
-Open `index.html` in Chrome and enter any access code at the vault door. Start on
-**Compliance — Entity** to show a client's own view; switch to **Overview —
-Authority** using the dropdown at the top to show the regulator's view.
+Open `index.html` in Chrome. The vault door appears immediately — the access code
+is already filled in, so just click **Open Vault**. Use the dropdown at the top to
+switch between **Overview — Authority** (the regulator's view) and
+**Compliance — Entity** (a client's own view).
 
-### Suggested walkthrough (about 90 seconds)
+### Suggested walkthrough (about two minutes)
 
-1. At the entity list, point out the four clients and their compliance
-   percentages — the hospital is visibly the weakest at 54%.
-2. Enter **Solstråle Barnehage**. Show the Regulatory AI Agent alerts at the top,
-   then the Audit Ready badge showing 3 blocking items.
-3. Open **Data Protection & Privacy** and select *Records of Processing
-   Activities* — show the gap description and the deadline.
-4. Upload a document. The AI pre-validation runs, findings appear, and the score
+1. **Start as the authority.** The map shows four clients across Norway and Italy.
+   Point out the red dot — Ospedale San Rocco at 54% — and the panel below saying
+   two clients need a targeted audit while two only need monitoring.
+2. Click the red dot. The panel shows its weakest areas and why it was flagged:
+   compliance below 60% and two unresolved critical gaps.
+3. Filter to **Lombardia** to show the aggregate figure recalculating for that
+   region alone.
+4. **Switch to Compliance — Entity** and enter **Solstråle Barnehage**. Show the
+   Regulatory AI Agent alerts at the top and the Audit Ready badge.
+5. Open **Data Protection & Privacy**, select *Records of Processing Activities*,
+   and show the gap description and its deadline.
+6. Upload a document. The AI pre-validation runs, findings appear, and the score
    moves from 62% to 65%.
-5. Submit for authority review, switch to **Overview — Authority**, approve it —
-   the score moves again to 66% and the critical gap clears.
+7. Submit for authority review, switch back to **Overview — Authority**, approve
+   it — the score reaches 66% and the critical gap clears.
 
 ### Worth knowing
 
@@ -80,8 +99,11 @@ The regulatory alerts are written to be realistic but are **illustrative only** 
 they have not been checked against the actual published regulations. They should
 be replaced with a real feed before anyone relies on them.
 
+The country outlines on the map are simplified illustrations, not survey-accurate
+maps. They are there to show position and status at a glance.
+
 ### Not in this version
 
-The regulator's map of Italy and Norway is the next piece of work. The public
-website (the landing page) is being handled separately and still shows the older
-maritime content.
+The two modules do not yet talk to each other — the authority's map and a client's
+own dashboard read the same data but are not linked by an interface. A new public
+website is a separate piece of work.
