@@ -57,7 +57,7 @@ platform, with kindergartens as just one of four example clients.
 
 ### How to view it
 
-Open `app.html` in Chrome and enter any access code at the vault door. Start on
+Open `index.html` in Chrome and enter any access code at the vault door. Start on
 **Compliance — Entity** to show a client's own view; switch to **Overview —
 Authority** using the dropdown at the top to show the regulator's view.
 

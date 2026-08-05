@@ -83,8 +83,11 @@ Foundation reskin is DONE and verified in-browser (no console errors):
 - **€ money still shows** on All-Assets vault cards ("Current Value €285M") and cert cost
   estimates. Compliance has no monetary value → **drop/replace with compliance %** in the
   general build.
-- **`index.html` (landing page) is still 100% yacht** (Delhi Star, MARPOL, "Turn any vessel…").
-  Separate track (Ashley redesign + Italian translation). Not part of the app demo.
+- ~~**`index.html` (landing page) is still 100% yacht**~~ — RESOLVED. The yacht landing page was
+  deleted and the app promoted to `index.html`, so the demo now opens straight on the vault door.
+  If the Ashley redesign track needs the old marketing copy, retrieve it from git:
+  `git show 7835efd:index.html`. A future landing page should live at a separate path (e.g.
+  `landing.html`) so it never sits in front of the demo again.
 - Criteria-framework pillar groupings are semantically mixed (only visible in hidden Scientific
   Committee view) — fix when that view is un-hidden.
 
@@ -121,7 +124,7 @@ Defaults for open micro-decisions (proceed unless Maria says otherwise):
   to ISO/GDPR/NIS2; add AI-agent-alert + audit-ready-report surfaces.
 - `js/state.js` → add hospital/municipal entities; generalize criteria; drop/repurpose € fields.
 - `js/views/all-assets.js` → remove € stat from cards; general entity index.
-- `app.html` / `js/router.js` → relabel personas to Overview / Compliance vocabulary.
+- `index.html` (the app shell; was `app.html`) / `js/router.js` → persona labels.
 
 ---
 
@@ -133,7 +136,7 @@ Defaults for open micro-decisions (proceed unless Maria says otherwise):
   prescriptive, small, with explicit verification + commit after each step.
 - **Tag before each iteration** (e.g. `git tag v4-pre-general main`) as a rollback point.
 - **Branch per iteration**, verify in browser (serve with `python -m http.server`, open
-  `app.html`), console must stay clean, then commit.
+  `index.html`), console must stay clean, then commit.
 - Work on a feature branch; don't push to `main` / merge until an iteration passes rehearsal.
 
 ---
@@ -152,7 +155,8 @@ version's changes** for Maria (she emails/reviews it). Keep a running
 ## 8. Do NOT build (anti-scope)
 Real backend / auth / database, real AI, real GIS map engine, real integrations
 (Miljødirektoratet, Innovasjon Norge, partner systems), mobile responsiveness, WCAG audit,
-API connection between the two modules (future), the landing page (separate Ashley track),
+API connection between the two modules (future), a new public landing page (separate Ashley
+track - must NOT be served at index.html, which is now the app),
 the "Share Risk / Green Shares" equity module (future, India track).
 
 ---

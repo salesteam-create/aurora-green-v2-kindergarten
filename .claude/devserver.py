@@ -44,7 +44,7 @@ def main():
     handler = partial(NoCacheHandler, directory='.')
     with ThreadingHTTPServer(('127.0.0.1', port), handler) as httpd:
         print('AGG demo (no-cache) serving on http://127.0.0.1:%d' % port)
-        print('Open http://127.0.0.1:%d/app.html' % port)
+        print('Open http://127.0.0.1:%d/ — the app is the entry point' % port)
         sys.stdout.flush()
         httpd.serve_forever()
 
