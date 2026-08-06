@@ -3,16 +3,17 @@ window.NAV = {
     { view: 'dashboard',     label: 'Dashboard',       icon: 'layout-dashboard' },
     { view: 'digital-twin',  label: 'Digital Twin',    icon: 'ship' },
     { view: 'asset-value',   label: 'Asset Value',     icon: 'trending-up' },
-    { view: 'suppliers',     label: 'Suppliers & Investors', icon: 'users' },
+    { view: 'suppliers',     label: 'Suppliers & Coverage', icon: 'users' },
     { view: 'reports',       label: 'Reports',         icon: 'file-text' },
   ],
   compliance: [
     { view: 'my-components', label: 'My Components',   icon: 'list-checks' },
     { view: 'cert-engine',   label: 'Certification Engine', icon: 'shield-check' },
     { view: 'submissions',   label: 'Submissions',     icon: 'send' },
-    { view: 'suppliers',     label: 'Suppliers & Investors', icon: 'users' },
+    { view: 'suppliers',     label: 'Suppliers & Coverage', icon: 'users' },
   ],
   dnv: [
+    { view: 'overview',      label: 'Overview Map',    icon: 'map' },
     { view: 'review-queue',  label: 'Review Queue',    icon: 'inbox' },
     { view: 'completed',     label: 'Completed',       icon: 'check-circle-2' },
   ],
@@ -26,17 +27,17 @@ window.NAV = {
 window.DEFAULT_VIEW = {
   owner: 'dashboard',
   compliance: 'my-components',
-  dnv: 'review-queue',
+  dnv: 'overview',
   scientific: 'framework',
 };
 
 window.PERSONA_LEVEL = { owner: 'vault', compliance: 'vault', dnv: 'sv', scientific: 'sv' };
 
 window.PERSONA_LABELS = {
-  owner: 'Captain Rao — Delhi Star Owner',
-  compliance: 'MarinePro Engineering Ltd.',
-  dnv: 'DNV — Maritime Classification',
-  scientific: 'Scientific Committee · Aurora Vault',
+  owner: 'Captain Rao — Delhi Star Owner', // hidden in this demo
+  compliance: 'Entity · Compliance Dashboard',
+  dnv: 'Authority · PA Due Diligence Overview',
+  scientific: 'Scientific Committee · Aurora Vault', // hidden in this demo
 };
 
 window.renderSidebar = function () {
@@ -53,7 +54,7 @@ window.renderSidebar = function () {
     html = `
       <div class="nav-item active">
         <i data-lucide="grid-3x3" class="w-4 h-4"></i>
-        <span>All Assets</span>
+        <span>All Entities</span>
       </div>`;
     nav.innerHTML = html;
   } else {
@@ -61,7 +62,7 @@ window.renderSidebar = function () {
       html += `
         <div class="nav-item" data-back-to-shell="1">
           <i data-lucide="arrow-left" class="w-4 h-4"></i>
-          <span>All Assets</span>
+          <span>All Entities</span>
         </div>
         <div class="my-2 border-t border-slate-800"></div>`;
     }
@@ -104,7 +105,7 @@ window.renderSidebar = function () {
 
   const footer = document.getElementById('sidebar-footer');
   if (stage === 'sv-shell' && level === 'vault') {
-    footer.innerHTML = `<div class="text-slate-400 mb-1">Aurora Vault</div><div class="text-slate-300">Asset Index</div>`;
+    footer.innerHTML = `<div class="text-slate-400 mb-1">Aurora Vault</div><div class="text-slate-300">Entity Index</div>`;
     lucide.createIcons();
     return;
   }
@@ -117,9 +118,10 @@ window.renderSidebar = function () {
     }
   }
   if (persona === 'compliance') {
-    footer.innerHTML = `<div class="text-slate-400 mb-1">Signed in as</div><div class="text-slate-300">MarinePro Engineering</div><div>Engine Room · Fuel · Accommodation</div>`;
+    const ent = window.demoState.compliantEntities[window.demoState.currentComplianceEntity];
+    footer.innerHTML = `<div class="text-slate-400 mb-1">Signed in as</div><div class="text-slate-300">${ent ? ent.name : ''}</div><div>Continuous Compliance Management</div>`;
   } else if (persona === 'dnv') {
-    footer.innerHTML = `<div class="text-slate-400 mb-1">Reviewer</div><div class="text-slate-300">DNV AS · Oslo</div>`;
+    footer.innerHTML = `<div class="text-slate-400 mb-1">Reviewer</div><div class="text-slate-300">Supervisory Authority</div><div>Italy &amp; Norway</div>`;
   } else if (persona === 'scientific') {
     footer.innerHTML = `<div class="text-slate-400 mb-1">Scientific Committee</div><div class="text-slate-300">Q1 2026 framework</div><div>ratified</div>`;
   } else {
@@ -183,6 +185,9 @@ window.toast = function (text) {
   const el = document.createElement('div');
   el.className = 'toast';
   el.textContent = text;
+  // Stack above any toasts already on screen so rapid actions don't overlap.
+  const existing = document.querySelectorAll('.toast').length;
+  el.style.bottom = (24 + existing * 52) + 'px';
   document.body.appendChild(el);
   setTimeout(() => { el.style.opacity = '0'; el.style.transform = 'translateY(8px)'; el.style.transition = 'all .3s'; }, 2600);
   setTimeout(() => el.remove(), 3000);

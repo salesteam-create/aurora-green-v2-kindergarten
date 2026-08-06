@@ -39,7 +39,6 @@ body.vault-locked #demo-bar, body.vault-locked aside { display: none; }
 .vault-dial { transition: transform 600ms ease-out; }
 .vault-dial.unlocking { animation: vault-unlock 600ms ease-out forwards; }
 @keyframes vault-unlock { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-.glass{background:rgba(23,37,68,.6);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.06);}
 .card{background:#172544;border:1px solid rgba(255,255,255,.05);border-radius:14px;}
 .card-hover:hover{border-color:rgba(45,212,191,.35);}
 .tab-active{background:rgba(45,212,191,.12);color:#5eead4;border-color:rgba(45,212,191,.4);}
@@ -109,7 +108,7 @@ body.vault-locked #demo-bar, body.vault-locked aside { display: none; }
   100%{box-shadow:0 0 0 0 rgba(45,212,191,0);transform:scale(1);}
 }
 
-/* Submit-to-DNV pulse when findings are ready */
+/* Submit-to-reviewer pulse when findings are ready */
 .submit-pulse{animation:submitPulse 1.6s ease 1;}
 @keyframes submitPulse{
   0%{box-shadow:0 0 0 0 rgba(45,212,191,.6);}

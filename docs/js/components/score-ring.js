@@ -29,7 +29,7 @@ window.statusPill = function (status) {
     'missing': ['pill-bad', 'Missing'],
     'partial': ['pill-warn', 'Partial'],
     'compliant': ['pill-ok', 'Compliant'],
-    'pending-review': ['pill-info', 'Pending DNV review'],
+    'pending-review': ['pill-info', 'Pending authority review'],
     'approved': ['pill-ok', 'Approved'],
   };
   const [cls, label] = map[status] || ['pill-neutral', status];

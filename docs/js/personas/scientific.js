@@ -17,14 +17,14 @@ function pageHeader(title, subline) {
 
 function weightPill(weight) {
   const pct = Math.round(weight * 100);
-  return `<span class="pill" style="background:rgba(45,212,191,.12);color:#5eead4;border:1px solid rgba(45,212,191,.3);">${pct}% of asset value</span>`;
+  return `<span class="pill" style="background:rgba(45,212,191,.12);color:#5eead4;border:1px solid rgba(45,212,191,.3);">${pct}% of compliance score</span>`;
 }
 
 window.ScientificViews.framework = function (root) {
   const fw = window.demoState.criteriaFramework || [];
   root.innerHTML = `
     ${pageHeader('Compliance Criteria Framework',
-      'Ratified by the Scientific Committee. Each criterion weights regulations and feeds the asset value model.')}
+      'Ratified by the Scientific Committee. Each criterion weights regulations and feeds the entity compliance score.')}
 
     <div class="grid grid-cols-12 gap-5">
       ${fw.map(c => `

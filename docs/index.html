@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Aurora · Maritime Compliance Platform</title>
+  <title>Aurora Green Genesis — Compliance Platform Demo</title>
+  <link rel="icon" type="image/png" href="aurora_green_logo__21__480.png" />
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
@@ -23,10 +24,9 @@
       <div class="flex items-center gap-2">
         <label class="text-slate-400">Switch persona:</label>
         <select id="persona-select" class="bg-slate-800 border border-slate-700 rounded-md px-3 py-1.5 text-slate-100 focus:outline-none focus:border-teal-400">
-          <option value="owner">Captain Rao — Asset Owner</option>
-          <option value="compliance">MarinePro Engineering — Compliance Entity</option>
-          <option value="dnv">DNV — Reviewer</option>
-          <option value="scientific">Scientific Committee — Aurora Vault</option>
+          <!-- owner and scientific personas are hidden in this demo; internal keys remain wired. -->
+          <option value="dnv">Overview — Authority</option>
+          <option value="compliance">Compliance — Entity</option>
         </select>
         <button id="reset-demo" class="ml-2 px-3 py-1.5 rounded-md border border-slate-700 text-slate-300 hover:border-teal-400 hover:text-teal-300">Reset Demo</button>
       </div>
@@ -37,9 +37,10 @@
   <div class="max-w-[1600px] mx-auto px-6 py-6 flex gap-6">
     <!-- Sidebar -->
     <aside class="agg-sidebar w-60 shrink-0 relative rounded-xl px-3 py-4">
-      <a href="index.html" class="flex items-center gap-2 mb-8 px-2 hover:opacity-80 transition-opacity" title="Back to landing page">
-        <img src="aurora_green_logo__21__480.png" alt="AGG" class="h-8 w-auto" />
-      </a>
+      <!-- The app is the entry point; there is no landing page to return to. -->
+      <div class="flex items-center gap-2 mb-8 px-2">
+        <img src="aurora_green_logo__21__480.png" alt="Aurora Green Genesis" class="h-8 w-auto" />
+      </div>
       <nav id="sidebar-nav" class="space-y-1 relative z-10"></nav>
       <div class="mt-10 px-2 text-xs text-slate-500 relative z-10">
         <div id="sidebar-footer"></div>
@@ -58,6 +59,7 @@
   <script src="js/components/score-ring.js"></script>
   <script src="js/components/charts.js"></script>
   <script src="js/components/digital-twin.js"></script>
+  <script src="js/components/overview-map.js"></script>
   <script src="js/components/upload.js"></script>
   <script src="js/personas/owner.js"></script>
   <script src="js/personas/compliance.js"></script>

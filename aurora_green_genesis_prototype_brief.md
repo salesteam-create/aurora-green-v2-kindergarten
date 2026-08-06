@@ -1,5 +1,37 @@
 # Aurora Green Genesis — Interactive Prototype Brief
 
+> **SUPERSEDED — retained as history.** This document describes the original yacht /
+> maritime build (three personas, digital twin, €285M hero flow). The authoritative
+> source of truth is now **`HANDOFF.md`**: one platform, two modules (PA Due Diligence
+> Overview + Compliance Dashboard), generic standards, no € machinery. Where the two
+> disagree, `HANDOFF.md` wins. Sections 2 (tech stack), 7 (content guidelines) and 9
+> (out of scope) below are still broadly valid; sections 3–6 and 10 are not.
+
+<!--
+POST-MEETING (kindergarten pilot — parked during the re-skin rehearsal pass, do not build before founder triage):
+
+- Rogaland map for the Overview user (Miljødirektoratet): colour-coded kindergarten status pins,
+  drill-down modal with certification level + Fornitører list. Today Overview reuses the review-queue
+  interface; the map is a real redesign, not a label swap.
+- Remove/replace the € machinery for the kindergarten vertical: currentValue/nominalValue/projectedValue,
+  fmtEUR displays, supplier valueContribution/equity framing all still speak in €M asset terms.
+  Needs a kindergarten-appropriate value model (or hiding) — cross-vertical decision.
+- Compliance workspace redesign per kindergarten brief: document workspace, Grønt Flagg progress
+  tracker, human-in-the-loop feedback panel, dynamic AI agent alerts. Current cert-engine covers the
+  loop but not the specified layout.
+- Criterion cost/timeline figures were preserved verbatim from the yacht build per the re-skin rule
+  (e.g. €18,000–25,000 for kildesortering). Implausible at barnehage scale — recalibrate when real
+  Grønt Flagg cost data exists.
+- index.html landing page is still full yacht copy (Delhi Star, vessels, digital twin mockups).
+  "prototype"/"DNV" were swept, but the page needs its own kindergarten pass or should be bypassed.
+- digital-twin.js ship SVG is loaded but unreachable (owner persona hidden). Replace with a
+  kindergarten floor plan or drop the script include when verticals converge.
+- English UI chrome (Certification Engine, Review Queue, Suppliers & Investors, status pills) vs
+  Norwegian content is deliberate for now; full localization is a product decision.
+- Persona registry is hardcoded in ~6 places (PERSONA_LEVEL, NAV, DEFAULT_VIEW, PERSONA_LABELS,
+  app.html select, sidebar footer). Converge into one data-driven registry before vertical #3.
+-->
+
 <!--
 v4 candidates (collected during iteration 3 vault-architecture rehearsal — triage with founder before iteration 4):
 
