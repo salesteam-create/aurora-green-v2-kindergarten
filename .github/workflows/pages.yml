@@ -1,0 +1,49 @@
+# Publishes the demo (docs/) to GitHub Pages.
+#
+# Why a workflow rather than the "Deploy from a branch" setting: the branch
+# setting silently stopped triggering builds, leaving a months-old deploy live
+# while main moved on. An explicit workflow makes the deploy visible in the
+# Actions tab, version-controlled, and re-runnable by hand.
+#
+# Requires: Settings -> Pages -> Source = "GitHub Actions".
+#
+# Only docs/ is uploaded, so everything else in the repo (HANDOFF.md, the client
+# changelog, the brief, .claude/) stays unpublished.
+name: Deploy demo to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Let a running deploy finish rather than cancelling it half-published.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v4
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload the demo directory
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs
+
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4
