@@ -10,13 +10,19 @@ and refuses to answer conditional requests with a 304.
 Development tooling only. The demo itself is plain static files and does not
 depend on this; serve it however you like when presenting.
 
-Usage:  python .claude/devserver.py [port]     (default 8765)
+Serves the docs/ directory, which is exactly what GitHub Pages publishes, so what
+you see locally is what the live site serves.
+
+Usage:  python .claude/devserver.py [port]     (default 8770)
 """
+import os
 import sys
 from functools import partial
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 
 DEFAULT_PORT = 8770
+# Repo root is the parent of .claude/; the site lives in docs/ beneath it.
+SITE_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'docs')
 
 
 class NoCacheHandler(SimpleHTTPRequestHandler):
@@ -41,10 +47,12 @@ class NoCacheHandler(SimpleHTTPRequestHandler):
 
 def main():
     port = int(sys.argv[1]) if len(sys.argv) > 1 else DEFAULT_PORT
-    handler = partial(NoCacheHandler, directory='.')
+    if not os.path.isdir(SITE_DIR):
+        sys.exit('docs/ not found at %s' % SITE_DIR)
+    handler = partial(NoCacheHandler, directory=SITE_DIR)
     with ThreadingHTTPServer(('127.0.0.1', port), handler) as httpd:
-        print('AGG demo (no-cache) serving on http://127.0.0.1:%d' % port)
-        print('Open http://127.0.0.1:%d/ — the app is the entry point' % port)
+        print('AGG demo (no-cache) serving docs/ on http://127.0.0.1:%d' % port)
+        print('This is the same tree GitHub Pages publishes.')
         sys.stdout.flush()
         httpd.serve_forever()
 

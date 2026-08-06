@@ -70,7 +70,8 @@ dashboard, and kindergartens as just one of four example clients.
 
 ### How to view it
 
-Open `index.html` in Chrome. The vault door appears immediately — the access code
+Open the demo in Chrome (`docs/index.html`, or the hosted link if one has been shared with
+you). The vault door appears immediately — the access code
 is already filled in, so just click **Open Vault**. Use the dropdown at the top to
 switch between **Overview — Authority** (the regulator's view) and
 **Compliance — Entity** (a client's own view).

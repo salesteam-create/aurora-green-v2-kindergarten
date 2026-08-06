@@ -65,8 +65,11 @@ compliance platform, two products (see §2). Kindergarten is now just ONE exampl
 Both modules are built and verified in-browser (console clean). Branch
 `feat/general-compliance`, rollback tag `v4-pre-general`.
 
-- **Entry point:** `index.html` IS the app (the yacht landing page was deleted; `app.html` no
-  longer exists). Opening the repo root lands on the Vault Door, code pre-filled `vault-2026`.
+- **Entry point:** `docs/index.html` IS the app (the yacht landing page was deleted; `app.html`
+  no longer exists). Lands on the Vault Door, code pre-filled `vault-2026`.
+- **The site lives in `docs/`** because GitHub Pages publishes that folder and nothing else.
+  Anything outside `docs/` -- this file, the client changelog, the brief -- stays private by
+  construction. Never move demo files back to the repo root.
 - **Vault architecture:** Vault Door (locked) → Scientific Vault shell → Entity Index → enter a
   Private Vault. Stages `locked` / `sv-shell` / `in-vault` in `js/state.js`.
 - **Personas:** internal keys `owner/compliance/dnv/scientific` kept. TWO exposed:
@@ -121,8 +124,8 @@ Nothing from the v4 plan is outstanding. Candidates for the next iteration, none
 2. **Rehearse at 1440×900** and fix any layout wrap.
 3. **API link between the two modules** (§2 says future) — today they read the same state object
    but there is no interface between them.
-4. **New public landing page** (separate track). Must NOT live at `index.html` — that is the app
-   now. Use `landing.html` or a separate site.
+4. **New public landing page** (separate track). Must NOT live at `docs/index.html` — that is
+   the app now. Give it its own path or its own site.
 5. **Un-hide the Scientific Committee persona** if the Committee story needs its own screen;
    would need the pillar groupings and € wording fixed first.
 6. **A fifth entity type (hotel)** — cheap now: 6 touchpoints, and shared controls need no new
@@ -131,6 +134,10 @@ Nothing from the v4 plan is outstanding. Candidates for the next iteration, none
 ---
 
 ## 5. Where things live (file → responsibility)
+
+Everything the demo needs is under `docs/` — that folder *is* the published site.
+Paths below are relative to `docs/`.
+
 - `js/components/overview-map.js` → the Module 1 map (silhouettes, pins, legend).
 - `js/personas/dnv.js` → Authority: overview map, review queue, completed reviews.
 - `js/personas/compliance.js` → Entity: components, cert engine, AI agent, audit ready, support.
@@ -139,6 +146,10 @@ Nothing from the v4 plan is outstanding. Candidates for the next iteration, none
 - `js/views/all-assets.js` → entity index cards.
 - `js/views/suppliers.js` → supplier coverage.
 - `index.html` / `js/router.js` → app shell, nav, persona labels.
+- `.nojekyll` → stops GitHub Pages running the files through Jekyll.
+
+Outside `docs/` and therefore never published: this file, `CHANGELOG-CLIENT.md`,
+the superseded brief, and `.claude/`.
 
 ---
 
